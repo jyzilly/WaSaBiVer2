@@ -6,8 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Wasabi 1.unity
+    guid: c974059c79c3869418259357852348c9
+  - enabled: 1
+    path: Assets/Scenes/Wasabi 2.unity
+    guid: d3e1107f5de289b45a0c926070e8a709
+  - enabled: 1
+    path: Assets/Scenes/Wasabi 3.unity
+    guid: 81273dbcb1f0d4f4786487263ac16c72
+  - enabled: 1
+    path: Assets/Scenes/Wasabi 4.unity
+    guid: b18f345a02a9cad4db707fd3fedaf8a8
+  - enabled: 1
+    path: Assets/Scenes/Wasabi 5.unity
+    guid: 3446d4410cb5b5946bdae29561622edd
+  - enabled: 1
+    path: Assets/Scenes/Wasabi 5.unity
+    guid: 1c010f20b01238544ac2d570dfedf202
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
