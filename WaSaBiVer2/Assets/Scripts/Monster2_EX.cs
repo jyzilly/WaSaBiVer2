@@ -9,6 +9,10 @@ public class Monster2_EX : MonoBehaviour
     public Transform[] waypoints;
     int m_CurrentWaypointIndex;
     private Animator animator;
+    AudioSource m_AudioSource;
+
+    public AudioClip footstep;
+    public AudioClip snowstep;
 
 
     private void Start()
@@ -16,6 +20,7 @@ public class Monster2_EX : MonoBehaviour
         navMeshAgent.SetDestination(waypoints[0].position);
         //navMeshAgent.speed = 120;
         animator = GetComponent<Animator>();
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -25,6 +30,8 @@ public class Monster2_EX : MonoBehaviour
             m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
             navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
         }
+
+       
 
         
     }
@@ -36,7 +43,9 @@ public class Monster2_EX : MonoBehaviour
             monsterIsAttack();
             animator.SetBool("isCrash", false);
         }
+
     }
+
 
     void monsterIsWalk()
     {
@@ -53,7 +62,13 @@ public class Monster2_EX : MonoBehaviour
     void monsterIsAttack()
     {
         animator.SetBool("isCrash", true);
-        navMeshAgent.speed = 0;
+        navMeshAgent.isStopped = true;
+    }
+
+    void FootStep()
+    {
+        //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
+        m_AudioSource.PlayOneShot(footstep);
     }
 
 }

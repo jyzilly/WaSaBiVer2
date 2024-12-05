@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 [System.Serializable]
 public struct CastInfo
@@ -14,9 +15,9 @@ public struct CastInfo
 public class WSBPlayerController : MonoBehaviour
 {
     /*이동함수에 필요하는 변수들 --------------------*/
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float runSpeed = 8f;
-    [SerializeField] private float smoothness = 10f;
+    [SerializeField] private float moveSpeed = 2;
+    [SerializeField] private float runSpeed = 6f;
+    [SerializeField] private float smoothness = 5f;
     [SerializeField] private float finalSpeed;
     [SerializeField] private bool run;
     [SerializeField] public Transform CamTr;
@@ -45,7 +46,7 @@ public class WSBPlayerController : MonoBehaviour
     [SerializeField, Range(0f, 360f)] private float viewAngle;
 
     //크리처1 레이어로 설정해서 -> 타겟
-    [SerializeField] private LayerMask creature1;
+    [SerializeField] private LayerMask Creature1;
 
     //선으로 시야각 표시각도
     //[SerializeField, Range(0.1f, 1f)] private float angle;
@@ -55,8 +56,7 @@ public class WSBPlayerController : MonoBehaviour
     //[SerializeField] private Vector3 offset;
     /*여기까지 --------------------------------------*/
 
-    private WSBCreature1 Cture1;
-
+    [SerializeField] private WSBCreature1 Cture1;
 
 
     private void Awake()
@@ -84,6 +84,8 @@ public class WSBPlayerController : MonoBehaviour
 
     private void Update()
     {
+
+
 
         //달리기 조작키
         if (Input.GetKey(KeyCode.LeftShift))
@@ -175,23 +177,25 @@ public class WSBPlayerController : MonoBehaviour
         WaitForSeconds wfs = new WaitForSeconds(0.1f);
         while (true)
         {
-            //원 범위 내 대상을 검출
-            Collider[] cols = Physics.OverlapSphere(transform.position, viewRange, creature1);
-            foreach (var i in cols)
+
+            float tmpAngle = viewAngle * 0.5f;
+            float tmpDist = 3f;
+            Vector3 playerRot = transform.rotation.eulerAngles;
+            int rayCount = Mathf.RoundToInt(viewAngle);
+            bool isCatch = false;
+            for (int i = 0; i < rayCount; ++i)
             {
-                Vector3 direction = (i.transform.position - transform.position).normalized;
-                Debug.Log("target in range");
-
-                //대상과의 각도가 설정한 각도 이내에 있는지 확인
-                //viewAngle은 전체 각도이라서 0.5 곱함
-                if (Vector3.Angle(transform.forward, direction) < (viewAngle * 0.5f))
+                Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
+                if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature1))
                 {
-                    Debug.Log("target in angle");
-                    //크리처1 시야 안에 들어와서 크리처1의 이동함수 끝기
-                    //Cture1.StopmoveOnCoroutine();
-
+                    //Debug.Log("Hit");
+                    isCatch = true;
+                    break;
                 }
             }
+
+            if (isCatch) Cture1.SetMoving(false);
+            else Cture1.SetMoving(true);
 
             yield return null;
         }
@@ -219,6 +223,9 @@ public class WSBPlayerController : MonoBehaviour
     }
 
     /*여기까지*/
+
+
+
 
 
 }

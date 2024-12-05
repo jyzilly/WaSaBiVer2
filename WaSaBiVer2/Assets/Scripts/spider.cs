@@ -1,18 +1,56 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-
-//요원(agent=enemy)에게 목적지를 알려줘서 목적지로 이동하게 한다.
-//상태를 만들어서 제어하고 싶다.
-// Idle : Player를 찾는다, 찾았으면 Run상태로 전이하고 싶다.
-//Run : 타겟방향으로 이동(요원)
-//Attack : 일정 시간마다 공격
 
 public class spider : MonoBehaviour
 {
+    public NavMeshAgent navMeshAgent;
+    public Transform[] waypoints;
+    public Transform target;
 
-   
+    private Animator animator;
+    int m_CurrentWaypointIndex;
+
+    private void Start()
+    {
+        navMeshAgent.SetDestination(waypoints[0].position);
+        animator = GetComponent<Animator>();
+
+    }
+
+    private void Update()
+    {
+        //transform.rotation = Quaternion.Euler(0, -180, 0);
+
+        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
+        {
+            m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
+            navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
+        }
+        
+    }
+
+    private void OnTriggerStay(Collider _collider) 
+    {
+        if (_collider.CompareTag("Player"))
+        {
+            //navMeshAgent.isStopped = true;
+            //animator.ResetTrigger("isAttack");
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isAttack", true);
+            navMeshAgent.SetDestination(target.position);
+            //navMeshAgent.isStopped = false;
+        }
+
+        if(!(_collider.CompareTag("Player")))
+        {
+            animator.SetBool("isAttack", false);
+            animator.SetBool("isWalk", true);
+
+        }
+
+
+    }
+
 }
