@@ -1,106 +1,28 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-
-//요원(agent=enemy)에게 목적지를 알려줘서 목적지로 이동하게 한다.
-//상태를 만들어서 제어하고 싶다.
-// Idle : Player를 찾는다, 찾았으면 Run상태로 전이하고 싶다.
-//Run : 타겟방향으로 이동(요원)
-//Attack : 일정 시간마다 공격
 
 public class spider : MonoBehaviour
 {
+    public NavMeshAgent navMeshAgent;
+    public Transform[] waypoints;
+    int m_CurrentWaypointIndex;
 
-    //목적지
-    public Transform target;
-    //요원
-    NavMeshAgent agent;
-
-    public Animator anim;
-
-    //열거형으로 정해진 상태값을 사용
-    enum State
+    private void Start()
     {
-        Idle,
-        Run,
-        Attack
-    }
-    //상태 처리
-    State state;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //생성시 상태를 Idle로 한다.
-        state = State.Idle;
-
-        //요원을 정의해줘서
-        agent = GetComponent<NavMeshAgent>();
+        navMeshAgent.SetDestination(waypoints[0].position);
+        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        //만약 state가 idle이라면
-        if (state == State.Idle)
+        //transform.rotation = Quaternion.Euler(0, -180, 0);
+
+        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
         {
-            UpdateIdle();
-        }
-        else if (state == State.Run)
-        {
-            UpdateRun();
-        }
-        else if (state == State.Attack)
-        {
-            UpdateAttack();
-        }
-
-    }
-
-    private void UpdateAttack()
-    {
-        agent.speed = 0;
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance > 2)
-        {
-            state = State.Run;
-            anim.SetTrigger("Run");
-        }
-    }
-
-    private void UpdateRun()
-    {
-
-
-        //남은 거리가 2미터라면 공격한다.
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= 2)
-        {
-            state = State.Attack;
-            anim.SetTrigger("Attack");
-        }
-
-        //타겟 방향으로 이동하다가
-        agent.speed = 3.5f;
-        //요원에게 목적지를 알려준다.
-        agent.destination = target.transform.position;
-
-    }
-
-    private void UpdateIdle()
-    {
-        agent.speed = 0;
-        //생성될때 목적지(Player)를 찿는다.
-        target = GameObject.Find("Player").transform;
-        //target을 찾으면 Run상태로 전이하고 싶다.
-        if (target != null)
-        {
-            state = State.Run;
-            //이렇게 state값을 바꿨다고 animation까지 바뀔까? no! 동기화를 해줘야한다.
-            anim.SetTrigger("Run");
+            m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
+            navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
         }
     }
 }
