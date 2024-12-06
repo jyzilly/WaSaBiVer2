@@ -1092,7 +1092,7 @@ GameObject:
   - component: {fileID: 7230023734122770840}
   m_Layer: 0
   m_Name: Ch46_nonPBR
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1108,7 +1108,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.96542716, z: -0, w: -0.26067302}
   m_LocalPosition: {x: -8.44, y: 0, z: 10.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2740482500175829402}
   - {fileID: 232380465912724351}
@@ -1127,19 +1127,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d46be47180679c41b613deff3625be0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 3
   runSpeed: 8
-  smoothness: 10
+  smoothness: 5
   finalSpeed: 0
-  run: 0
+  run: 1
   CamTr: {fileID: 8704122014780264738}
   maxHp: 100
   viewRange: 10
   viewAngle: 90
-  creature1:
+  Creature1:
     serializedVersion: 2
     m_Bits: 64
   lineList: []
+  Cture1: {fileID: 0}
 --- !u!143 &3552294757054351370
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1180,7 +1181,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1210,8 +1211,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
+  m_UseGravity: 1
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -1871,13 +1872,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7522619860540923815}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20146057, y: -0.045284733, z: 0.009324452, w: 0.9784048}
-  m_LocalPosition: {x: -0.07, y: 1.35, z: -0.06}
+  m_LocalRotation: {x: 0.015254722, y: -0.046229362, z: 0.0007060534, w: 0.9988141}
+  m_LocalPosition: {x: -0.07, y: 2, z: -0.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5722322512515816427}
-  m_LocalEulerAnglesHint: {x: 23.27, y: -5.3, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.75, y: -5.3, z: 0}
 --- !u!20 &7004700134024982542
 Camera:
   m_ObjectHideFlags: 0
