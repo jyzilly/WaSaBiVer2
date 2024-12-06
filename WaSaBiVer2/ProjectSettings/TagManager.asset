@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - snow
+  - FlashLight
+  - CutScene
+  - monster2
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Monster2_EX : MonoBehaviour
 {
@@ -12,8 +13,12 @@ public class Monster2_EX : MonoBehaviour
     AudioSource m_AudioSource;
 
     public AudioClip footstep;
-    public AudioClip snowstep;
+    //public AudioClip snowstep;
 
+    //public Image image;
+    //private float alpha = 0f;
+
+    //public Transform mazepoint;
 
     private void Start()
     {
@@ -41,11 +46,39 @@ public class Monster2_EX : MonoBehaviour
         {
             Debug.Log("플레이어 닿임");
             monsterIsAttack();
-            animator.SetBool("isCrash", false);
+            //StartCoroutine(monsterAttackAni());
+            //animator.SetBool("isCrash", false);
         }
 
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            animator.SetBool("isCrash", false);
+
+            navMeshAgent.isStopped = false;
+        }    
+    }
+
+    //IEnumerator monsterAttackAni()
+    //{
+    //    GameObject.Find("Canvas").transform.Find("Panel").transform.gameObject.SetActive(true);
+
+    //    yield return new WaitForSeconds(1.0f);
+
+    //    while (alpha < 1.0f)
+    //    {
+    //        alpha += Time.deltaTime;
+    //        image.color = new Color(1, 1, 1, alpha);
+    //    }
+
+    //    yield return new WaitForSeconds(0.5f);
+
+    //    transform.position = mazepoint.position;
+
+    //}
 
     void monsterIsWalk()
     {
@@ -65,7 +98,7 @@ public class Monster2_EX : MonoBehaviour
         navMeshAgent.isStopped = true;
     }
 
-    void FootStep()
+    public void FootStep()
     {
         //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
         m_AudioSource.PlayOneShot(footstep);
