@@ -78,6 +78,12 @@ public class WSBPlayerController : MonoBehaviour
     private WSBMainGameController mainGameManager;
 
     public bool isSpider = false;
+    public bool isCreature1 = false;
+    public bool isCreature2 = false;
+    public bool isCreature2_1 = false;
+    public bool isCreature2_2 = false;
+
+    public bool isMovable = false;
 
 
     private void Awake()
@@ -231,22 +237,28 @@ public class WSBPlayerController : MonoBehaviour
                 {
                     //Debug.Log("Hit");
                     isCatch = true;
+                    isCreature1 = true;
 
                     break;
 
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2))
                 {
+                    isCreature2 = true;
                     break;
 
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_1))
                 {
+                    isCreature2_1 = true;
+
                     break;
 
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_2))
                 {
+                    isCreature2_2 = true;
+
 
                     break;
                 }

@@ -10,7 +10,6 @@ public class WSBMainGameController : MonoBehaviour
     public bool isSameItem_2 = false;
     public bool isSameItem_3 = false;
     public bool isSameItem_4 = false;
-    public bool isSameItem_5 = false;
 
     public bool isRun = false;
 
@@ -52,7 +51,28 @@ public class WSBMainGameController : MonoBehaviour
         {
             //크리쳐 2
             ItemManager.PressedFirecrackerButton();
-            Debug.Log(ItemManager.item3Able);
+            if (ItemManager.item3Able)
+            {
+                
+                if (PlayerController.isCreature2)
+                {
+                    
+                    // 맞게 사용된 파티클 효과
+                    isRun = true;
+                }
+                else if (PlayerController.isCreature2_1)
+                {
+
+                    // 맞게 사용된 파티클 효과
+                    isRun = true;
+                }
+                else if (PlayerController.isCreature2_2)
+                {
+
+                    // 맞게 사용된 파티클 효과
+                    isRun = true;
+                }
+            }
 
 
         }
@@ -60,7 +80,16 @@ public class WSBMainGameController : MonoBehaviour
         {
             // 크리쳐 1
             ItemManager.PressedBlockballButton();
-            Debug.Log(ItemManager.item4Able);
+            if (ItemManager.item4Able)
+            {
+                
+                if (PlayerController.isCreature1)
+                {
+                    
+                    // 맞게 사용된 파티클 효과
+                    isRun = true;
+                }
+            }
 
 
         }
