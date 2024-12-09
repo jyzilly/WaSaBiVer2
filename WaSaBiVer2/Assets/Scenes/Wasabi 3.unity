@@ -1928,6 +1928,14 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 1088860222}
+    - target: {fileID: 7877822147546156099, guid: 61e31d5c36b0fd14fbb051facb02762a, type: 3}
+      propertyPath: Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7877822147546156099, guid: 61e31d5c36b0fd14fbb051facb02762a, type: 3}
+      propertyPath: blockball
+      value: 
+      objectReference: {fileID: 5271494384847961374, guid: 8a140030204eaa14e998aa0972d3f925, type: 3}
     - target: {fileID: 7903756200070449072, guid: 61e31d5c36b0fd14fbb051facb02762a, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.00031094076
@@ -10677,6 +10685,17 @@ Transform:
   - {fileID: 147980862}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &843015997 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1283727591819138193, guid: ecfb52099aa1cb64d81568f897613c3d, type: 3}
+  m_PrefabInstance: {fileID: 1526333982}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &844589929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14012,6 +14031,8 @@ MonoBehaviour:
   waypoint: {fileID: 0}
   image: {fileID: 0}
   mazepoint: {fileID: 0}
+  CountDown: 10
+  CountDownDisplay: {fileID: 843015997}
 --- !u!114 &1088860222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14056,6 +14077,10 @@ MonoBehaviour:
   isCreature2_1: 0
   isCreature2_2: 0
   isMovable: 0
+  blockball: {fileID: 6733782899849185749, guid: 2055a7e53d5eedc4596eca8e49ca17ff, type: 3}
+  rotateSpeed: 2
+  throwPower: {x: 16, y: 16, z: 16}
+  _dir: {x: 0, y: 0, z: 2}
 --- !u!1 &1091440587
 GameObject:
   m_ObjectHideFlags: 0
@@ -23023,7 +23048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5722322512515816427, guid: 85a655cdb51538041a309f05d8f30985, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -29.1
+      value: -28.84
       objectReference: {fileID: 0}
     - target: {fileID: 5722322512515816427, guid: 85a655cdb51538041a309f05d8f30985, type: 3}
       propertyPath: m_LocalPosition.y
@@ -23031,7 +23056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5722322512515816427, guid: 85a655cdb51538041a309f05d8f30985, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -47.7
+      value: -47.3
       objectReference: {fileID: 0}
     - target: {fileID: 5722322512515816427, guid: 85a655cdb51538041a309f05d8f30985, type: 3}
       propertyPath: m_LocalRotation.w
@@ -25148,7 +25173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5457431283651903433, guid: c404e3b71a8b9474a80ba48c6bffa2c4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7403854012969954854, guid: c404e3b71a8b9474a80ba48c6bffa2c4, type: 3}
       propertyPath: hpBar
