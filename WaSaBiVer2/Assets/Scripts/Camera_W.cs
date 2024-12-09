@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Camera_W : MonoBehaviour
 {
-  private float mouseX;
+ // private float mouseX;
   private float mouseY = 0f;
     [SerializeField] float mouseSpeed = 8f;
 

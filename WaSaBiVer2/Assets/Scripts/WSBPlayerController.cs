@@ -26,6 +26,9 @@ public class WSBPlayerController : MonoBehaviour
     //private float mouseY = 0f;
 
 
+
+    public bool isMovable = true;
+
     /*이동함수에 필요하는 변수들 --------------------*/
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private float runSpeed = 6f;
@@ -160,27 +163,34 @@ public class WSBPlayerController : MonoBehaviour
     //플레이어 이동하는 함수
     private void InputMovement()
     {
-        //run true이면 run속도로 바꾸기
-        finalSpeed = (run) ? runSpeed : moveSpeed;
-
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-
-        Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
-
-        if (moveDirection.magnitude > 0)
+        if (isMovable)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
+            //run true이면 run속도로 바꾸기
+            finalSpeed = (run) ? runSpeed : moveSpeed;
+
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 right = transform.TransformDirection(Vector3.right);
+
+            Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
+
+            if (moveDirection.magnitude > 0)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
+            }
+
+            controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
+
+
+            float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
+            animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
+
+            CamTr = transform;
         }
-
-        controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
-
-
-        float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
-        animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
-
-        CamTr = transform;
+        else
+        {
+            return;
+        }
     }
 
  

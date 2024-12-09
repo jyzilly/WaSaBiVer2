@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 482548730461884440}
   - component: {fileID: 7219276667317177577}
   m_Layer: 5
-  m_Name: Slot
+  m_Name: flash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

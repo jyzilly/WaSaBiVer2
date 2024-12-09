@@ -66,6 +66,7 @@ public class WSBItemManager : MonoBehaviour
 
     private void Start()
     {
+
         CreatItem();
 
         //fire.onClick.AddListener(PressedFireButton);
@@ -284,10 +285,10 @@ public class WSBItemManager : MonoBehaviour
 
     private void CreatItem()
     {
-        for(int i = 0; i < 1; ++i)
+        for(int i = 0; i < 7; ++i)
         {
             
-           // GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            //GameObject randomItem = Items[Random.Range(0, Items.Length)];
             GameObject randomItem = Items[2];
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 

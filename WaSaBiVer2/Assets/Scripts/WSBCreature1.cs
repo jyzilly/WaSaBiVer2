@@ -103,9 +103,9 @@ public class WSBCreature1 : MonoBehaviour
         if (other.tag == "Player")
         {
             Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
-            navMeshAgent.isStopped = true;
-            Player.Damage(damage);
-            Debug.Log("여기까지 왔음");
+            //navMeshAgent.isStopped = true;
+            //Player.Damage(damage);
+            //Debug.Log("여기까지 왔음");
             Debug.Log("크리처1한테 Damage입었다 현재 hp : " + Player.CurHp);
             //hpBar.UpdateHpBar(Player.MaxHp, Player.CurHp);
             //효과내는 코드를 여기서 추가
