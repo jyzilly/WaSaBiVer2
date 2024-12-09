@@ -28,19 +28,19 @@ public class Monster2_EX : MonoBehaviour
 
     private void Awake()
     {
-        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
-        m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
+        //m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
         //navMeshAgent.speed = 120;
-        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
     }
 
 
     private void Start()
     {
 
+        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
+        m_AudioSource = GetComponent<AudioSource>();
+        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
         animator = GetComponent<Animator>();
         navMeshAgent.SetDestination(waypoints[0].position);
-       // m_AudioSource = GetComponent<AudioSource>();
         colorCreature = image.color;
 
     }
@@ -133,7 +133,7 @@ public class Monster2_EX : MonoBehaviour
     public void FootStep()
     {
         //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
-        m_AudioSource.PlayOneShot(footstep);
+        //m_AudioSource.PlayOneShot(footstep);
     }
 
 }

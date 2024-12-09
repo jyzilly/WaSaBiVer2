@@ -73,7 +73,6 @@ public class WSBCreature1 : MonoBehaviour
 
     private void Start()
     {
-        Testbt.onClick.AddListener(TrChanged);
 
     }
 

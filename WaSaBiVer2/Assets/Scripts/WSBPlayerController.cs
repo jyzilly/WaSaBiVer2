@@ -132,8 +132,7 @@ public class WSBPlayerController : MonoBehaviour
         rx = CamTr.transform.eulerAngles.x;
         ry = CamTr.transform.eulerAngles.y;
 
-       // blockball.transform.position = CamTr.transform.position + dir;
-        blockball.GetComponent<Rigidbody>().useGravity = false;
+ 
     }
 
     private void Update()
