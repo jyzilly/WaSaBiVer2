@@ -52,10 +52,10 @@ public class WSBCreature1 : MonoBehaviour
 
 
     /*이동함수 코로틴*/
-    private Coroutine moveOnCoroutine = null;
+    public Coroutine moveOnCoroutine = null;
 
 
-    private bool isMoving = false;
+    public bool isMoving = false;
 
 
 

@@ -3,6 +3,7 @@ using UnityEngine.Animations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public struct CastInfo
@@ -12,9 +13,27 @@ public struct CastInfo
     public float Distance;  // 거리
     public float Angle; //각도
 }
+
 public class WSBPlayerController : MonoBehaviour
 {
-    /*이동함수에 필요하는 변수들 --------------------*/
+
+    //[SerializeField] float speed = 5f;
+    //[SerializeField] float mouseSpeed = 8f;
+    //private float gravity;
+    //private CharacterController controller;
+    //private Vector3 mov;
+
+
+   // private float mouseX;
+    //private float mouseY = 0f;
+
+    public bool isMovable = true;
+
+
+
+
+    ////////////////////////////////
+    ///*이동함수에 필요하는 변수들 --------------------*/
     [SerializeField] private float moveSpeed = 2;
     [SerializeField] private float runSpeed = 6f;
     [SerializeField] private float smoothness = 5f;
@@ -80,12 +99,40 @@ public class WSBPlayerController : MonoBehaviour
         StartCoroutine(CheckTarget());
         /*여기까지*/
 
+        //controller = GetComponent<CharacterController>();
+        //mov = Vector3.zero;
+        //gravity = 10f;
+
     }
 
     private void Update()
     {
+        //if (isMovable)
+        //{
+        //    mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
 
+        //    mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
+        //    mouseY = Mathf.Clamp(mouseY, -50f, 30f);
+        //    this.transform.localEulerAngles = new Vector3(-mouseY, mouseX, 0);
 
+        //    if (controller.isGrounded)
+        //    {
+        //        mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        //        mov = controller.transform.TransformDirection(mov);
+        //    }
+        //    else
+        //    {
+        //        mov.y -= gravity * Time.deltaTime;
+        //    }
+
+        //    controller.Move(mov * Time.deltaTime * speed);
+
+        //    isMovable = true;
+        //}
+        //else
+        //{
+        //    return;
+        //}
 
         //달리기 조작키
         if (Input.GetKey(KeyCode.LeftShift))
@@ -110,6 +157,10 @@ public class WSBPlayerController : MonoBehaviour
             animator.SetBool("Jump", false);
         }
 
+
+        
+
+        
         //만약에 시야각에 크리처1 들어오면 크리처1 이동하는 함수 호출
 
     }
@@ -157,18 +208,10 @@ public class WSBPlayerController : MonoBehaviour
         {
             curHp = 0f;
             isDead = true;
-            Debug.Log("Player is Dead");
+            SceneManager.LoadScene("Wasabi 6");
         }
     }
 
-    //플레이어가 소세지 먹으면 hp회복하는 함수
-    public void Heal(float _heal)
-    {
-        if (isDead) return;
-
-        curHp += _heal;
-        if (curHp > maxHp) curHp = maxHp;
-    }
 
 
     /*시야각 함수들*/
@@ -188,7 +231,7 @@ public class WSBPlayerController : MonoBehaviour
                 Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature1))
                 {
-                    //Debug.Log("Hit");
+                    Debug.Log("Hit");
                     isCatch = true;
                     break;
                 }
@@ -224,7 +267,7 @@ public class WSBPlayerController : MonoBehaviour
 
     /*여기까지*/
 
-
+    
 
 
 

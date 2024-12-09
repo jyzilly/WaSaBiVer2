@@ -5,6 +5,15 @@ TagManager:
   serializedVersion: 3
   tags:
   - snow
+  - charm
+  - fire
+  - firecracker
+  - blockball
+  - CutScene
+  - monster2
+  - FlashLight
+  - Key
+  - Memory
   layers:
   - Default
   - TransparentFX
