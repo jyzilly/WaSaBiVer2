@@ -2,6 +2,8 @@ using TMPro;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class WSBItemManager : MonoBehaviour
 {
@@ -29,65 +31,158 @@ public class WSBItemManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI firecrackerCnt;
     [SerializeField] private TextMeshProUGUI blockballCnt;
 
+
+    //아이템 이미지 
+    [SerializeField] private Image flashImg;
+    [SerializeField] private Image charmImg;
+    [SerializeField] private Image fireImg;
+    [SerializeField] private Image firecrackerImg;
+    [SerializeField] private Image blockballImg;
+
+
     private int CharmCnt = 0;
     private int FireCnt = 0;
     private int FirecrackerCnt = 0;
     private int BlockballCnt = 0;
 
+    public bool item1Able = false;
+    public bool item2Able = false;
+    public bool item3Able = false;
+    public bool item4Able = false;
+
+
+   // private bool PlayerGetLight; //true일 경우 손전등on
+   // private Light myLight; //light 컴포넌트를 담는 변수
+
+    [SerializeField] private GameObject[] Items;
+
+
+    [SerializeField] private Transform[] CreatItemTrs;
+
+
+    private void Awake()
+    {
+    }
 
     private void Start()
     {
-        fire.onClick.AddListener(PressedFireButton);
-        fire.onClick.AddListener(PressedCharm);
-        fire.onClick.AddListener(PressedFirecracker);
-        fire.onClick.AddListener(PressedBlockball);
+        CreatItem();
+
+        //fire.onClick.AddListener(PressedFireButton);
+        //charm.onClick.AddListener(PressedCharmButton);
+        //firecracker.onClick.AddListener(PressedFirecrackerButton);
+        //blockball.onClick.AddListener(PressedBlockballButton);
+
+       // PlayerGetLight = false; //초기에는 손전등의 불빛이 꺼진 상태
+       // myLight = this.GetComponent<Light>(); //오브젝트가 가진 light 컴포넌트를 가져옴.
     }
 
     private void Update()
     {
         GetItem();
+        SetItemImg();
+
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    PressedFireButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    PressedCharmButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.C))
+        //{
+        //    PressedFirecrackerButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.V))
+        //{
+        //    PressedBlockballButton();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    PlayerGetLight = PlayerGetLight ? false : true; //r키를 눌러 손전등의 불빛을 on/off
+        //}
+        //if (PlayerGetLight == false)
+        //{
+        //    myLight.intensity = 0; //손전등 off
+        //    flashImg.enabled = false;
+        //}
+
+
+        //if (PlayerGetLight == true)
+        //{
+        //    myLight.intensity = 10; //손전등 on
+        //    flashImg.enabled = true;
+        //}
+
+
     }
 
     private void GetItem()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log(hit.transform.gameObject);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            bool getItem = false;
-            //태그로 아이템을 인식하기. 아이템마다 태그를 추가하기
-            //부적
-            if (hit.transform.gameObject.tag == "charm")
+            if (Physics.Raycast(ray, out hit))
             {
-                CharmCnt += 1;
-                getItem = true;
-            }
-            //불
-            else if (hit.transform.gameObject.tag == "fire")
-            {
-                FireCnt += 1;
-                getItem = true;
-            }
-            //폭죽
-            else if (hit.transform.gameObject.tag == "firecracker")
-            {
-                FirecrackerCnt += 1;
-                getItem = true;
-            }
-            //경계구슬
-            else if (hit.transform.gameObject.tag == "blockball")
-            {
-                BlockballCnt += 1;
-                getItem = true;
-            }
-            if (getItem == true)
-            {
-                UpdateItemCnt();
-            }
+                Debug.Log(hit.transform.gameObject);
 
+                bool getItem = false;
+                //태그로 아이템을 인식하기. 아이템마다 태그를 추가하기
+                //부적
+                if (hit.transform.gameObject.tag == "charm")
+                {
+                    //if (Input.GetMouseButtonDown(0))
+                    {
+                        CharmCnt += 1;
+                        getItem = true;
+                        //Destroy(GameObject.FindGameObjectWithTag("charm"));                        
+                    }
+                }
+                //불
+                else if (hit.transform.gameObject.tag == "fire")
+                {
+                    //if (Input.GetMouseButtonDown(0))
+                    {
+                        FireCnt += 1;
+                        getItem = true;
+                        //Destroy(GameObject.FindGameObjectWithTag("fire"));
+
+                    }
+                }
+                //폭죽
+                else if (hit.transform.gameObject.tag == "firecracker")
+                {
+                    //if (Input.GetMouseButtonDown(0))
+                    {
+                        FirecrackerCnt += 1;
+                        getItem = true;
+                        //Destroy(GameObject.FindGameObjectWithTag("firecracker"));
+
+                    }
+                }
+                //경계구슬
+                else if (hit.transform.gameObject.tag == "blockball")
+                {
+                    //if (Input.GetMouseButtonDown(0))
+                    {
+                        BlockballCnt += 1;
+                        getItem = true;
+                        //Destroy(GameObject.FindGameObjectWithTag("blockball"));
+
+                    }
+                }
+
+                if (getItem == true)
+                {
+                    UpdateItemCnt();
+                    Destroy(hit.transform.gameObject);
+                }
+
+            }
         }
     }
 
@@ -100,45 +195,104 @@ public class WSBItemManager : MonoBehaviour
         blockballCnt.text = BlockballCnt.ToString();
     }
 
-    private void PressedFireButton()
+    public void PressedFireButton()
     {
         if (FireCnt > 0)
         {
             --FireCnt;
             UpdateItemCnt();
+            item1Able = true;
         }
+
+        //else if(FireCnt > 0 && GameObject.Find("itemCollider"))
+        //{
+        //    --FireCnt;
+        //    UpdateItemCnt();
+        //}
+
     }
 
-    private void PressedCharm()
+    public void PressedCharmButton()
     {
         if (CharmCnt > 0)
         {
             --CharmCnt;
             UpdateItemCnt();
+
+            item2Able = true;
+
         }
     }
 
-    private void PressedFirecracker()
+    public void PressedFirecrackerButton()
     {
         if (FirecrackerCnt > 0)
         {
             --FirecrackerCnt;
             UpdateItemCnt();
+            item3Able = true;
+
         }
     }
 
-    private void PressedBlockball()
+    public void PressedBlockballButton()
     {
         if (BlockballCnt > 0)
         {
             --BlockballCnt;
             UpdateItemCnt();
+            item4Able = true;
+
         }
     }
 
+    private void SetItemImg()
+    {
+        if (CharmCnt == 0)
+        {
+            charmImg.enabled = false;
+        }
+        else
+        {
+            charmImg.enabled = true;
+        }
+        if(FireCnt == 0)
+        {
+            fireImg.enabled = false;
+        }
+        else
+        {
+            fireImg.enabled = true;
+        }
+        if(FirecrackerCnt == 0)
+        {
+            firecrackerImg.enabled = false;
+        }
+        else
+        {
+            firecrackerImg.enabled = true;
+        }
+        if(BlockballCnt == 0)
+        {
+            blockballImg.enabled = false;
+        }
+        else
+        {
+            blockballImg.enabled = true;
+        }
+    }
 
+    private void CreatItem()
+    {
+        for(int i = 0; i < 7; ++i)
+        {
+            
+            GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
-
+        }
+        Debug.Log("생성완료");
+    }
 
 
 

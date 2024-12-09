@@ -5,32 +5,26 @@ using System.Collections;
 
 public class WSBHpBar : MonoBehaviour
 {
-    [SerializeField] private RectTransform yellowRectTr = null;
-
-    [SerializeField]
-    private Image redImg = null;
-
+    [SerializeField] private RectTransform redImg = null;
     private float maxWidth = 0f;
     private float maxHeight = 0f;
 
     private void Awake()
     {
-        maxWidth = yellowRectTr.sizeDelta.x;
-        maxHeight = yellowRectTr.sizeDelta.y;
+       maxWidth = redImg.sizeDelta.x;
+       maxHeight = redImg.sizeDelta.y;
 
     }
 
     public void UpdateHpBar(float _maxHp, float _curHp)
     {
         UpdateHpBar(_curHp / _maxHp);
-
-
     }
 
     public void UpdateHpBar(float _amount)
     {
-        //float prevWidth = redImg.GetComponent<RectTransform>().sizeDelta.x;
-        float prevWidth = yellowRectTr.sizeDelta.x;
+        float prevWidth = redImg.sizeDelta.x;
+        //float prevWidth = yellowRectTr.sizeDelta.x;
         float newWidth = maxWidth * _amount;
 
         StopAllCoroutines();
@@ -42,17 +36,17 @@ public class WSBHpBar : MonoBehaviour
         }
         else
         {
-            yellowRectTr.sizeDelta = new Vector2(newWidth, maxHeight);
+            //yellowRectTr.sizeDelta = new Vector2(newWidth, maxHeight);
         }
 
-        redImg.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, maxHeight);
+        redImg.sizeDelta = new Vector2(newWidth, maxHeight);
     }
 
 
     private IEnumerator UpdateHpBarCoroutine(float _prevWidth, float _newWidth)
     {
         Vector3 size = new Vector2(_prevWidth, maxHeight);
-        yellowRectTr.sizeDelta = size;
+        //yellowRectTr.sizeDelta = size;
 
         float t = 0f;
         while (t < 1f)
@@ -60,7 +54,7 @@ public class WSBHpBar : MonoBehaviour
             t += Time.deltaTime;
 
             size.x = Mathf.Lerp(_prevWidth, _newWidth, t);
-            yellowRectTr.sizeDelta = size;
+            //yellowRectTr.sizeDelta = size;
         }
         yield return null;
     }
