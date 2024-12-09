@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -18,12 +19,16 @@ public class P_CTRL : MonoBehaviour
 
     public Transform mazepoint;
 
-  
+
+    [SerializeField] private float CountDown = 240f; // 카운트다운 시간
+    [SerializeField] private TextMeshProUGUI CountDownDisplay = null; // 카운트 ui
+    private bool countdownStarted = false; // 카운트다운 시작 확인 기본은 off
+
+
     private void Start()
     {
         pd = GetComponent<PlayableDirector>();
         control = GetComponent<WSBPlayerController>();
-        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,7 +44,7 @@ public class P_CTRL : MonoBehaviour
 
         if (other.tag == "monster2")
         {
-            //StartCoroutine(monsterAttackAni());
+            StartCoroutine(monsterAttackAni());
         }
         
     }
@@ -70,5 +75,30 @@ public class P_CTRL : MonoBehaviour
         Debug.Log("끝");
         transform.position = waypoint.position;
         control.isMovable = true;
+        StartCountdown();
     }
+
+    private void StartCountdown() //버튼 활성화 함수
+    {
+        if (!countdownStarted)  //만약에 카운트 다운 실행이 안되었다면
+        {
+            countdownStarted = true; // 이제 실행 
+
+            //코루틴 실행
+            StartCoroutine(CountDownToStart());
+        }
+    }
+    private IEnumerator CountDownToStart()
+    {
+        float time = CountDown;
+        //while 반복문 돌릴 변수는 카운트 다운 타임
+        while (time >= 0)
+        {
+            CountDownDisplay.text = Mathf.Ceil(time).ToString(); // 카운트다운 UI 업데이트
+            yield return new WaitForSeconds(1f); //1초를 기다리고
+            time--; //1초씩 뺀다.
+        }
+
+    }
+
 }

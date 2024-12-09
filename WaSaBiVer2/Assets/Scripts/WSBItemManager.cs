@@ -51,13 +51,21 @@ public class WSBItemManager : MonoBehaviour
     public bool item4Able = false;
 
 
-   // private bool PlayerGetLight; //true일 경우 손전등on
-   // private Light myLight; //light 컴포넌트를 담는 변수
+    // private bool PlayerGetLight; //true일 경우 손전등on
+    // private Light myLight; //light 컴포넌트를 담는 변수
 
+    //아이템
     [SerializeField] private GameObject[] Items;
-
-
     [SerializeField] private Transform[] CreatItemTrs;
+    //메모리퍼즐 & 키 
+    [SerializeField] private GameObject[] MemoryKeys;
+    [SerializeField] private Transform[] CreatMKTr;
+    //키 이미지 & 메모리퍼즐 이미지
+    [SerializeField] private GameObject[] KeyAndMemoryImgs;
+
+
+    private int keyCnt = 0;
+    private int memoryCnt = 0;
 
 
     private void Awake()
@@ -67,14 +75,14 @@ public class WSBItemManager : MonoBehaviour
     private void Start()
     {
         CreatItem();
-
+        SetMK();
         //fire.onClick.AddListener(PressedFireButton);
         //charm.onClick.AddListener(PressedCharmButton);
         //firecracker.onClick.AddListener(PressedFirecrackerButton);
         //blockball.onClick.AddListener(PressedBlockballButton);
 
-       // PlayerGetLight = false; //초기에는 손전등의 불빛이 꺼진 상태
-       // myLight = this.GetComponent<Light>(); //오브젝트가 가진 light 컴포넌트를 가져옴.
+        // PlayerGetLight = false; //초기에는 손전등의 불빛이 꺼진 상태
+        // myLight = this.GetComponent<Light>(); //오브젝트가 가진 light 컴포넌트를 가져옴.
     }
 
     private void Update()
@@ -175,15 +183,33 @@ public class WSBItemManager : MonoBehaviour
 
                     }
                 }
+                else if (hit.transform.gameObject.tag == "Key")
+                {
+                    //key1의 이미지를 활성화하기
+                    //
+                    keyCnt += 1;
+                    getItem = true;
+                }
+                else if (hit.transform.gameObject.tag == "Memory")
+                {
+                    memoryCnt += 1;
+                    getItem = true;
+                }
+
 
                 if (getItem == true)
                 {
                     UpdateItemCnt();
                     Destroy(hit.transform.gameObject);
                 }
+                Debug.Log("Key : " + keyCnt);
+                Debug.Log("Momory : " + memoryCnt);
 
             }
         }
+
+
+        CheckKeyCnt();
     }
 
 
@@ -280,6 +306,36 @@ public class WSBItemManager : MonoBehaviour
         {
             blockballImg.enabled = true;
         }
+
+
+        if (keyCnt == 1)
+        {
+            KeyAndMemoryImgs[0].SetActive(true);
+        }
+        if (keyCnt == 2)
+        {
+            KeyAndMemoryImgs[1].SetActive(true);
+        }
+        if (keyCnt == 3)
+        {
+            KeyAndMemoryImgs[2].SetActive(true);
+        }
+        if (memoryCnt == 1)
+        {
+            KeyAndMemoryImgs[3].SetActive(true);
+        }
+        if (memoryCnt == 2)
+        {
+            KeyAndMemoryImgs[4].SetActive(true);
+        }
+        if (memoryCnt == 3)
+        {
+            KeyAndMemoryImgs[5].SetActive(true);
+        }
+        if (memoryCnt == 4)
+        {
+            KeyAndMemoryImgs[6].SetActive(true);
+        }
     }
 
     private void CreatItem()
@@ -292,10 +348,40 @@ public class WSBItemManager : MonoBehaviour
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
         }
-        Debug.Log("생성완료");
+        Debug.Log("아이템 생성완료");
     }
 
 
+    private void SetMK()
+    {
+        for (int i = 0; i < 7; ++i)
+        {
+            //i번째 위치에서 i번 키 or 메모리 퍼즐 생성하기
+            Instantiate(MemoryKeys[i], CreatMKTr[i].position, Quaternion.identity);
+        }
+    }
 
+    private void CheckKeyCnt()
+    {
+        if (keyCnt == 3)
+        {
+            //문 활성화
+
+            //메모리 퍼즐 체크해서 엔딩씬 넘어가기
+            CheckResult();
+        }
+    }
+
+    private void CheckResult()
+    {
+        if (keyCnt == 3 && memoryCnt == 2 || memoryCnt == 3 || memoryCnt == 4)
+        {
+            //굿엔딩
+        }
+        else if (keyCnt == 3 && memoryCnt == 5)
+        {
+            //진엔딩
+        }
+    }
 }
 

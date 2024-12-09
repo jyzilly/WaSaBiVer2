@@ -1,4 +1,6 @@
 using System.Collections;
+using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -17,7 +19,7 @@ public class WSBCreature1 : MonoBehaviour
 
 
 
-    public NavMeshAgent navMeshAgent;
+   
 
     /*플레이어 hp 관련 변수들 ---------------------------*/
     [SerializeField] private WSBPlayerController Player = null;
@@ -37,12 +39,12 @@ public class WSBCreature1 : MonoBehaviour
     //private Transform Creature1Tr = null;
 
     //플레이어 근처 갔을 때 반경거리
-    private int distance = 5;
+    private int distance = 10;
     /*여기까지 -------------------------------------*/
 
 
     /*크리처1 이동에 관한 변수들 -----------*/
-    private float moveSpeed = 2f;
+    private float moveSpeed = 1f;
 
     /*여기까지 --------------------------*/
 
@@ -52,15 +54,17 @@ public class WSBCreature1 : MonoBehaviour
 
     //test용
     //[SerializeField] private GameObject Test1 = null;
-    [SerializeField] private Button Testbt = null;
+    //[SerializeField] private Button Testbt = null;
 
 
     /*이동함수 코로틴*/
-    private Coroutine moveOnCoroutine = null;
+    public Coroutine moveOnCoroutine = null;
 
 
-    private bool isMoving = false;
+    public bool isMoving = false;
 
+
+    private WSBMainGameController GameManager = null;
 
 
 
@@ -69,17 +73,26 @@ public class WSBCreature1 : MonoBehaviour
         OriginCreature1Tr = Cture1.transform.position;
 
         Cture1animator = GetComponent<Animator>();
+        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        Player = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
+        hpBar = GameObject.Find("hpmanager").GetComponent<WSBHpBar>();
     }
 
     private void Start()
     {
-        Testbt.onClick.AddListener(TrChanged);
+
     }
 
     private void Update()
     {
-    }
+        if (GameManager.isRun)
+        {
+            TrChanged();
+            GameManager.isRun = false;
+        }
 
+    }
+     
 
     //눈알아이템 작동하면 호출하게 함
     public void TrChanged()
@@ -103,7 +116,7 @@ public class WSBCreature1 : MonoBehaviour
         if (other.tag == "Player")
         {
             Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
-            navMeshAgent.isStopped = true;
+         
             Player.Damage(damage);
             Debug.Log("여기까지 왔음");
             Debug.Log("크리처1한테 Damage입었다 현재 hp : " + Player.CurHp);
@@ -159,5 +172,9 @@ public class WSBCreature1 : MonoBehaviour
         //    Debug.Log("moveOnCorourine been Stopped");
         //}
     }
+
+
+
+
 }
 

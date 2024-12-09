@@ -19,7 +19,8 @@ public class WSBMainGameController : MonoBehaviour
     {
         ItemManager = GameObject.Find("ItemManager").GetComponent<WSBItemManager>();
         PlayerController = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
-        
+
+
     }
 
     private void Update()
@@ -86,7 +87,8 @@ public class WSBMainGameController : MonoBehaviour
                 
                 if (PlayerController.isCreature1)
                 {
-                    
+                    Debug.Log("확인");
+
                     // 맞게 사용된 파티클 효과
                     isRun = true;
                 }
