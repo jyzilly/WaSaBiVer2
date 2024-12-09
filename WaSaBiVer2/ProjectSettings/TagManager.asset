@@ -17,6 +17,7 @@ TagManager:
   - monster2
   - Creature2_1
   - Creature2-2
+  - Monster2_attack
   layers:
   - Default
   - TransparentFX
