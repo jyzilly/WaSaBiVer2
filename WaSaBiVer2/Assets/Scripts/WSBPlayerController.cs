@@ -17,15 +17,15 @@ public struct CastInfo
 public class WSBPlayerController : MonoBehaviour
 {
 
-    [SerializeField] float speed = 5f;
-    [SerializeField] float mouseSpeed = 8f;
-    private float gravity;
-    private CharacterController controller;
-    private Vector3 mov;
+    //[SerializeField] float speed = 5f;
+    //[SerializeField] float mouseSpeed = 8f;
+    //private float gravity;
+    //private CharacterController controller;
+    //private Vector3 mov;
 
 
-    private float mouseX;
-    private float mouseY = 0f;
+    //private float mouseX;
+    //private float mouseY = 0f;
 
     public bool isMovable = true;
 
@@ -34,15 +34,15 @@ public class WSBPlayerController : MonoBehaviour
 
     ////////////////////////////////
     ///*이동함수에 필요하는 변수들 --------------------*/
-    //[SerializeField] private float moveSpeed = 2;
+    [SerializeField] private float moveSpeed = 2;
     [SerializeField] private float runSpeed = 6f;
-    //[SerializeField] private float smoothness = 5f;
-    //[SerializeField] private float finalSpeed;
+    [SerializeField] private float smoothness = 5f;
+    [SerializeField] private float finalSpeed;
     [SerializeField] private bool run;
-    //[SerializeField] public Transform CamTr;
+    [SerializeField] public Transform CamTr;
 
     Animator animator;
-   // CharacterController controller;
+    CharacterController controller;
     /*여기까지 -------------------------------------*/
 
 
@@ -64,11 +64,12 @@ public class WSBPlayerController : MonoBehaviour
     //시야각도
     [SerializeField, Range(0f, 360f)] private float viewAngle;
 
+    
     //크리처1 레이어로 설정해서 -> 타겟
     [SerializeField] private LayerMask Creature1;
 
     //선으로 시야각 표시각도
-    //[SerializeField, Range(0.1f, 1f)] private float angle;
+    [SerializeField, Range(0.1f, 1f)] private float angle;
     //선 정보리스트
     [SerializeField] private List<CastInfo> lineList;
     //위치정보용 벡터
@@ -99,40 +100,35 @@ public class WSBPlayerController : MonoBehaviour
         StartCoroutine(CheckTarget());
         /*여기까지*/
 
-        controller = GetComponent<CharacterController>();
-        mov = Vector3.zero;
-        gravity = 10f;
+        //controller = GetComponent<CharacterController>();
+        //mov = Vector3.zero;
+        //gravity = 10f;
 
     }
 
     private void Update()
     {
-        if (isMovable)
-        {
-            mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
+        //if (isMovable)
+        //{
 
-            mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
-            mouseY = Mathf.Clamp(mouseY, -50f, 30f);
-            this.transform.localEulerAngles = new Vector3(-mouseY, mouseX, 0);
+        //    if (controller.isGrounded)
+        //    {
+        //        mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        //        mov = controller.transform.TransformDirection(mov);
+        //    }
+        //    else
+        //    {
+        //        mov.y -= gravity * Time.deltaTime;
+        //    }
 
-            if (controller.isGrounded)
-            {
-                mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                mov = controller.transform.TransformDirection(mov);
-            }
-            else
-            {
-                mov.y -= gravity * Time.deltaTime;
-            }
+        //    controller.Move(mov * Time.deltaTime * speed);
 
-            controller.Move(mov * Time.deltaTime * speed);
-
-            isMovable = true;
-        }
-        else
-        {
-            return;
-        }
+        //    isMovable = true;
+        //}
+        //else
+        //{
+        //    return;
+        //}
 
         //달리기 조작키
         if (Input.GetKey(KeyCode.LeftShift))
@@ -145,7 +141,7 @@ public class WSBPlayerController : MonoBehaviour
         }
 
         //이동하는  함수호출
-        //InputMovement();
+        InputMovement();
 
         //뛰기 조작키
         if (Input.GetKeyDown(KeyCode.Space))
@@ -166,30 +162,32 @@ public class WSBPlayerController : MonoBehaviour
     }
 
     //플레이어 이동하는 함수
-    //private void InputMovement()
-    //{
-    //    //run true이면 run속도로 바꾸기
-    //    finalSpeed = (run) ? runSpeed : moveSpeed;
+    private void InputMovement()
+    {
+        //run true이면 run속도로 바꾸기
+        finalSpeed = (run) ? runSpeed : moveSpeed;
 
-    //    Vector3 forward = transform.TransformDirection(Vector3.forward);
-    //    Vector3 right = transform.TransformDirection(Vector3.right);
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        Vector3 right = transform.TransformDirection(Vector3.right);
 
-    //    Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
+        Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
 
-    //    if (moveDirection.magnitude > 0)
-    //    {
-    //        Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
-    //    }
+        if (moveDirection.magnitude > 0)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
+        }
 
-    //    controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
+        controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
 
 
-    //    float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
-    //    animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
+        float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
+        animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
 
-    //    CamTr = transform;
-    //}
+        CamTr = transform;
+
+       // Debug.DrawRay();
+    }
 
     //크리처나 거미줄 만났을 때 호출하는 함수
     private void OnTriggerEnter(Collider other)
@@ -246,6 +244,7 @@ public class WSBPlayerController : MonoBehaviour
 
     private IEnumerator DrawRayLine()
     {
+        Debug.Log("Line");
         while (true)
         {
             lineList.Clear();
