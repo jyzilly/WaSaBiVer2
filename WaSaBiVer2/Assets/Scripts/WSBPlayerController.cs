@@ -77,6 +77,9 @@ public class WSBPlayerController : MonoBehaviour
     [SerializeField] private WSBCreature1 Cture1;
     private WSBMainGameController mainGameManager;
 
+    public bool isSpider = false;
+
+
     private void Awake()
     {
 
@@ -197,7 +200,7 @@ public class WSBPlayerController : MonoBehaviour
 
 
     /*시야각 함수들*/
-    private IEnumerator CheckTarget()
+    public IEnumerator CheckTarget()
     {
         WaitForSeconds wfs = new WaitForSeconds(0.1f);
         while (true)
@@ -209,6 +212,8 @@ public class WSBPlayerController : MonoBehaviour
             int rayCount = Mathf.RoundToInt(viewAngle);
             bool isCatch = false;
 
+            
+             
 
            ;
 
@@ -217,7 +222,10 @@ public class WSBPlayerController : MonoBehaviour
                 Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
-                  
+                    isSpider = true;
+                    Debug.Log("this is Spider");
+
+
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature1))
                 {
