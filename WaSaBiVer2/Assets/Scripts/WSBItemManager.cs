@@ -45,6 +45,11 @@ public class WSBItemManager : MonoBehaviour
     private int FirecrackerCnt = 0;
     private int BlockballCnt = 0;
 
+    public bool item1Able = false;
+    public bool item2Able = false;
+    public bool item3Able = false;
+    public bool item4Able = false;
+
 
    // private bool PlayerGetLight; //true일 경우 손전등on
    // private Light myLight; //light 컴포넌트를 담는 변수
@@ -77,22 +82,22 @@ public class WSBItemManager : MonoBehaviour
         GetItem();
         SetItemImg();
 
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            PressedFireButton();
-        }
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            PressedCharmButton();
-        }
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-            PressedFirecrackerButton();
-        }
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            PressedBlockballButton();
-        }
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    PressedFireButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    PressedCharmButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.C))
+        //{
+        //    PressedFirecrackerButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.V))
+        //{
+        //    PressedBlockballButton();
+        //}
 
         //if (Input.GetKeyDown(KeyCode.R))
         //{
@@ -190,39 +195,54 @@ public class WSBItemManager : MonoBehaviour
         blockballCnt.text = BlockballCnt.ToString();
     }
 
-    private void PressedFireButton()
+    public void PressedFireButton()
     {
         if (FireCnt > 0)
         {
             --FireCnt;
             UpdateItemCnt();
+            item1Able = true;
         }
+
+        //else if(FireCnt > 0 && GameObject.Find("itemCollider"))
+        //{
+        //    --FireCnt;
+        //    UpdateItemCnt();
+        //}
+
     }
 
-    private void PressedCharmButton()
+    public void PressedCharmButton()
     {
         if (CharmCnt > 0)
         {
             --CharmCnt;
             UpdateItemCnt();
+
+            item2Able = true;
+
         }
     }
 
-    private void PressedFirecrackerButton()
+    public void PressedFirecrackerButton()
     {
         if (FirecrackerCnt > 0)
         {
             --FirecrackerCnt;
             UpdateItemCnt();
+            item3Able = true;
+
         }
     }
 
-    private void PressedBlockballButton()
+    public void PressedBlockballButton()
     {
         if (BlockballCnt > 0)
         {
             --BlockballCnt;
             UpdateItemCnt();
+            item4Able = true;
+
         }
     }
 
@@ -264,10 +284,11 @@ public class WSBItemManager : MonoBehaviour
 
     private void CreatItem()
     {
-        for(int i = 0; i < 7; ++i)
+        for(int i = 0; i < 1; ++i)
         {
             
-            GameObject randomItem = Items[Random.Range(0, Items.Length)];
+           // GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            GameObject randomItem = Items[2];
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
         }
