@@ -45,22 +45,19 @@ public class WSBItemManager : MonoBehaviour
     private int FirecrackerCnt = 0;
     private int BlockballCnt = 0;
 
+    public bool item1Able = false;
+    public bool item2Able = false;
+    public bool item3Able = false;
+    public bool item4Able = false;
+
 
    // private bool PlayerGetLight; //true일 경우 손전등on
    // private Light myLight; //light 컴포넌트를 담는 변수
 
-    //아이템
     [SerializeField] private GameObject[] Items;
+
+
     [SerializeField] private Transform[] CreatItemTrs;
-    //메모리퍼즐 & 키 
-    [SerializeField] private GameObject[] MemoryKeys;
-    [SerializeField] private Transform[] CreatMKTr;
-    //키 이미지 & 메모리퍼즐 이미지
-    [SerializeField] private GameObject[] KeyAndMemoryImgs;
-
-
-    private int keyCnt = 0;
-    private int memoryCnt = 0;
 
 
     private void Awake()
@@ -70,7 +67,7 @@ public class WSBItemManager : MonoBehaviour
     private void Start()
     {
         CreatItem();
-        SetMK();
+
         //fire.onClick.AddListener(PressedFireButton);
         //charm.onClick.AddListener(PressedCharmButton);
         //firecracker.onClick.AddListener(PressedFirecrackerButton);
@@ -85,22 +82,22 @@ public class WSBItemManager : MonoBehaviour
         GetItem();
         SetItemImg();
 
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            PressedFireButton();
-        }
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            PressedCharmButton();
-        }
-        if(Input.GetKeyDown(KeyCode.C))
-        {
-            PressedFirecrackerButton();
-        }
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            PressedBlockballButton();
-        }
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    PressedFireButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    PressedCharmButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.C))
+        //{
+        //    PressedFirecrackerButton();
+        //}
+        //if(Input.GetKeyDown(KeyCode.V))
+        //{
+        //    PressedBlockballButton();
+        //}
 
         //if (Input.GetKeyDown(KeyCode.R))
         //{
@@ -179,32 +176,14 @@ public class WSBItemManager : MonoBehaviour
                     }
                 }
 
-                else if (hit.transform.gameObject.tag == "Key")
-                {
-                    //key1의 이미지를 활성화하기
-                    //
-                    keyCnt += 1;
-                    getItem = true;
-                }
-                else if (hit.transform.gameObject.tag == "Memory")
-                {
-                    memoryCnt += 1;
-                    getItem = true;
-                }
-
-
-
                 if (getItem == true)
                 {
                     UpdateItemCnt();
                     Destroy(hit.transform.gameObject);
                 }
-                Debug.Log("Key : " + keyCnt);
-                Debug.Log("Momory : " + memoryCnt);
+
             }
         }
-
-        CheckKeyCnt();
     }
 
 
@@ -216,39 +195,54 @@ public class WSBItemManager : MonoBehaviour
         blockballCnt.text = BlockballCnt.ToString();
     }
 
-    private void PressedFireButton()
+    public void PressedFireButton()
     {
         if (FireCnt > 0)
         {
             --FireCnt;
             UpdateItemCnt();
+            item1Able = true;
         }
+
+        //else if(FireCnt > 0 && GameObject.Find("itemCollider"))
+        //{
+        //    --FireCnt;
+        //    UpdateItemCnt();
+        //}
+
     }
 
-    private void PressedCharmButton()
+    public void PressedCharmButton()
     {
         if (CharmCnt > 0)
         {
             --CharmCnt;
             UpdateItemCnt();
+
+            item2Able = true;
+
         }
     }
 
-    private void PressedFirecrackerButton()
+    public void PressedFirecrackerButton()
     {
         if (FirecrackerCnt > 0)
         {
             --FirecrackerCnt;
             UpdateItemCnt();
+            item3Able = true;
+
         }
     }
 
-    private void PressedBlockballButton()
+    public void PressedBlockballButton()
     {
         if (BlockballCnt > 0)
         {
             --BlockballCnt;
             UpdateItemCnt();
+            item4Able = true;
+
         }
     }
 
@@ -286,36 +280,6 @@ public class WSBItemManager : MonoBehaviour
         {
             blockballImg.enabled = true;
         }
-
-        if(keyCnt == 1)
-        {
-            KeyAndMemoryImgs[0].SetActive(true);
-        }
-        if (keyCnt == 2)
-        {
-            KeyAndMemoryImgs[1].SetActive(true);
-        }
-        if (keyCnt == 3)
-        {
-            KeyAndMemoryImgs[2].SetActive(true);
-        }
-        if(memoryCnt == 1)
-        {
-            KeyAndMemoryImgs[3].SetActive(true);
-        }
-        if(memoryCnt == 2)
-        {
-            KeyAndMemoryImgs[4].SetActive(true);
-        }
-        if (memoryCnt == 3)
-        {
-            KeyAndMemoryImgs[5].SetActive(true);
-        }
-        if (memoryCnt == 4)
-        {
-            KeyAndMemoryImgs[6].SetActive(true);
-        }
-
     }
 
     private void CreatItem()
@@ -323,7 +287,8 @@ public class WSBItemManager : MonoBehaviour
         for(int i = 0; i < 7; ++i)
         {
             
-            GameObject randomItem = Items[Random.Range(0, Items.Length)];
+           GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            //GameObject randomItem = Items[2];
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
         }
@@ -331,37 +296,6 @@ public class WSBItemManager : MonoBehaviour
     }
 
 
-    private void SetMK()
-    {
-        for (int i = 0; i < 7; ++i)
-        {
-            //i번째 위치에서 i번 키 or 메모리 퍼즐 생성하기
-            Instantiate(MemoryKeys[i], CreatMKTr[i].position, Quaternion.identity);
-        }
-    }
-
-    private void CheckKeyCnt()
-    {
-        if (keyCnt == 3)
-        {
-            //문 활성화
-
-            //메모리 퍼즐 체크해서 엔딩씬 넘어가기
-            CheckResult();
-        }
-    }
-
-    private void CheckResult()
-    {
-        if (keyCnt == 3 && memoryCnt == 2 || memoryCnt == 3 || memoryCnt == 4)
-        {
-            //굿엔딩
-        }
-        else if (keyCnt == 3 && memoryCnt == 5)
-        {
-            //진엔딩
-        }
-    }
 
 }
 
