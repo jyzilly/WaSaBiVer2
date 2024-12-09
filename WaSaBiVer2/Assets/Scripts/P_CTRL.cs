@@ -37,7 +37,7 @@ public class P_CTRL : MonoBehaviour
 
         if (other.tag == "monster2")
         {
-            StartCoroutine(monsterAttackAni());
+            //StartCoroutine(monsterAttackAni());
         }
         
     }

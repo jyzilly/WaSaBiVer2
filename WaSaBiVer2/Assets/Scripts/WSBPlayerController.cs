@@ -25,7 +25,7 @@ public class WSBPlayerController : MonoBehaviour
     //private float mouseX;
     //private float mouseY = 0f;
 
-
+    private WSBMainGameController MainGM;
 
     public bool isMovable = true;
 
@@ -86,7 +86,7 @@ public class WSBPlayerController : MonoBehaviour
     public bool isCreature2_1 = false;
     public bool isCreature2_2 = false;
 
-    public bool isMovable = false;
+    //public bool isMovable = false;
 
 
     private void Awake()
@@ -99,6 +99,7 @@ public class WSBPlayerController : MonoBehaviour
         mainGameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
+        MainGM = GetComponent<WSBMainGameController>();
 
         //hp 초기화시키는 설정
         curHp = maxHp;
@@ -204,6 +205,9 @@ public class WSBPlayerController : MonoBehaviour
     //플레이어 Hp 관한 함수. 데미지 입었을 때 hp감소하는 함수
     public void Damage(float _dmg)
     {
+        //MainGM.Prefabs[0].SetActive(true);
+        //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+        //Debug.Log("들어옴");
         curHp -= _dmg;
         if (curHp < 0f)
         {
@@ -212,6 +216,7 @@ public class WSBPlayerController : MonoBehaviour
             Debug.Log("Player is Dead");
             SceneManager.LoadScene("Wasabi 6");
         }
+        //MainGM.Invoke("OffItemPb", 1.5f);
     }
 
 
@@ -226,9 +231,9 @@ public class WSBPlayerController : MonoBehaviour
             float tmpDist = 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
-            bool isCatch = false;
 
             
+            bool isCatch = false;
              
 
            ;
@@ -245,7 +250,7 @@ public class WSBPlayerController : MonoBehaviour
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature1))
                 {
-                    //Debug.Log("Hit");
+                    Debug.Log("Hit");
                     isCatch = true;
                     isCreature1 = true;
 

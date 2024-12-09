@@ -1,31 +1,48 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class Monster2_EX : MonoBehaviour
 {
+    public Transform player = null;
     public NavMeshAgent navMeshAgent;
     public Transform[] waypoints;
     int m_CurrentWaypointIndex;
     private Animator animator;
     AudioSource m_AudioSource;
 
+    bool isTeleport = false;
+
     public AudioClip footstep;
     //public AudioClip snowstep;
 
-    //public Image image;
-    //private float alpha = 0f;
+    public Image image;
+    private float alpha = 0f;
+    private Color colorCreature;
 
-    //public Transform mazepoint;
+    public Transform mazepoint;
+
+    private void Awake()
+    {
+        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
+        m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
+        //navMeshAgent.speed = 120;
+        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
+    }
+
 
     private void Start()
     {
-        navMeshAgent.SetDestination(waypoints[0].position);
-        //navMeshAgent.speed = 120;
+
         animator = GetComponent<Animator>();
-        m_AudioSource = GetComponent<AudioSource>();
+        navMeshAgent.SetDestination(waypoints[0].position);
+       // m_AudioSource = GetComponent<AudioSource>();
+        colorCreature = image.color;
+
     }
 
     private void Update()
@@ -46,8 +63,9 @@ public class Monster2_EX : MonoBehaviour
         {
             Debug.Log("플레이어 닿임");
             monsterIsAttack();
-            //StartCoroutine(monsterAttackAni());
-            //animator.SetBool("isCrash", false);
+            if (isTeleport) return;
+            StartCoroutine(monsterAttackAni());
+            animator.SetBool("isCrash", false);
         }
 
     }
@@ -57,28 +75,42 @@ public class Monster2_EX : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animator.SetBool("isCrash", false);
-
             navMeshAgent.isStopped = false;
         }    
     }
 
-    //IEnumerator monsterAttackAni()
-    //{
-    //    GameObject.Find("Canvas").transform.Find("Panel").transform.gameObject.SetActive(true);
+    IEnumerator monsterAttackAni()
+    {
+        isTeleport = true;
+        GameObject.Find("Canvas").transform.Find("Panel").transform.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.5f);
+        image.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.3f);
 
-    //    yield return new WaitForSeconds(1.0f);
+        while (colorCreature.a < 1f)
+        {
+            
+            colorCreature.a += (Time.deltaTime)*1.2f / 1f;
+            image.color = colorCreature;
+            yield return new WaitForEndOfFrame();
+            //break;
+        }
 
-    //    while (alpha < 1.0f)
-    //    {
-    //        alpha += Time.deltaTime;
-    //        image.color = new Color(1, 1, 1, alpha);
-    //    }
+        GameObject.Find("Canvas").transform.Find("Panel").transform.gameObject.SetActive(false);
+        yield return new WaitForSeconds(.3f);
 
-    //    yield return new WaitForSeconds(0.5f);
+        colorCreature.a = 0;
+        image.color = Color.black;
+        image.gameObject.SetActive(false);
 
-    //    transform.position = mazepoint.position;
+        Debug.Log(colorCreature.a);
 
-    //}
+        player.transform.position = mazepoint.position;
+        isTeleport = false;
+        yield return null;
+
+
+    }
 
     void monsterIsWalk()
     {

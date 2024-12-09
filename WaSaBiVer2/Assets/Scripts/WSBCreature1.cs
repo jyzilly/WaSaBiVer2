@@ -15,9 +15,8 @@ public class WSBCreature1 : MonoBehaviour
 
     //순서는 눈알아이템 작동하면 플레이어 주변 위치로 이동하고 플레이어 쫓아가는 함수를 작동하면서 단 조건이 앞에 아무것도 없는 상황.만약에 결계구슬있으면 그 앞에 멈춰야 한다.
 
+    private WSBPlayerController control;
 
-
-    public NavMeshAgent navMeshAgent;
 
     /*플레이어 hp 관련 변수들 ---------------------------*/
     [SerializeField] private WSBPlayerController Player = null;
@@ -69,11 +68,13 @@ public class WSBCreature1 : MonoBehaviour
         OriginCreature1Tr = Cture1.transform.position;
 
         Cture1animator = GetComponent<Animator>();
+        control = GetComponent<WSBPlayerController>();
     }
 
     private void Start()
     {
         Testbt.onClick.AddListener(TrChanged);
+
     }
 
     private void Update()
@@ -102,13 +103,28 @@ public class WSBCreature1 : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
+            //SetMoving(false);
+
+            isMoving = false;
+            Cture1animator.SetBool("isAttack", true);
+            Player.Damage(damage);
+
+            //Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
             //navMeshAgent.isStopped = true;
             //Player.Damage(damage);
             //Debug.Log("여기까지 왔음");
             Debug.Log("크리처1한테 Damage입었다 현재 hp : " + Player.CurHp);
             //hpBar.UpdateHpBar(Player.MaxHp, Player.CurHp);
             //효과내는 코드를 여기서 추가
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            isMoving = true;
+            Cture1animator.SetBool("isAttack", false);
         }
     }
 
@@ -133,7 +149,7 @@ public class WSBCreature1 : MonoBehaviour
                 //Vector3 velocity = moveDirection * moveSpeed * Time.deltaTime;
                 //Cture1controller.Move(velocity);
                 Cture1animator.SetFloat("Blend", 0.5f,0f,Time.deltaTime);
-                //Cture1animator.speed = 2f;
+                Cture1animator.speed = 2f;
             }
             else
             {
