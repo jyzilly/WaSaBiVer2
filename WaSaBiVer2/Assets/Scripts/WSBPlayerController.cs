@@ -229,7 +229,7 @@ public class WSBPlayerController : MonoBehaviour
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
                     isSpider = true;
-                    Debug.Log("this is Spider");
+                    //Debug.Log("this is Spider");
 
 
                 }

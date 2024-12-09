@@ -18,10 +18,12 @@ public class P_CTRL : MonoBehaviour
 
     public Transform mazepoint;
 
+  
     private void Start()
     {
         pd = GetComponent<PlayableDirector>();
         control = GetComponent<WSBPlayerController>();
+        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,7 +39,7 @@ public class P_CTRL : MonoBehaviour
 
         if (other.tag == "monster2")
         {
-            StartCoroutine(monsterAttackAni());
+            //StartCoroutine(monsterAttackAni());
         }
         
     }

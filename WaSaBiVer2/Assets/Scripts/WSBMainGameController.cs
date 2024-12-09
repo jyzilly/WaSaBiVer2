@@ -31,6 +31,7 @@ public class WSBMainGameController : MonoBehaviour
             if(ItemManager.item1Able)
             {
                 Debug.Log(ItemManager.item1Able);
+
                 if (PlayerController.isSpider)
                 {
                     Debug.Log(PlayerController.isSpider);
