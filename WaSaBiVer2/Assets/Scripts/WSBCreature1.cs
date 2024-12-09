@@ -1,6 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
-using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -17,9 +15,8 @@ public class WSBCreature1 : MonoBehaviour
 
     //순서는 눈알아이템 작동하면 플레이어 주변 위치로 이동하고 플레이어 쫓아가는 함수를 작동하면서 단 조건이 앞에 아무것도 없는 상황.만약에 결계구슬있으면 그 앞에 멈춰야 한다.
 
+    private WSBPlayerController control;
 
-
-   
 
     /*플레이어 hp 관련 변수들 ---------------------------*/
     [SerializeField] private WSBPlayerController Player = null;
@@ -39,12 +36,12 @@ public class WSBCreature1 : MonoBehaviour
     //private Transform Creature1Tr = null;
 
     //플레이어 근처 갔을 때 반경거리
-    private int distance = 10;
+    private int distance = 5;
     /*여기까지 -------------------------------------*/
 
 
     /*크리처1 이동에 관한 변수들 -----------*/
-    private float moveSpeed = 1f;
+    private float moveSpeed = 2f;
 
     /*여기까지 --------------------------*/
 
@@ -54,17 +51,15 @@ public class WSBCreature1 : MonoBehaviour
 
     //test용
     //[SerializeField] private GameObject Test1 = null;
-    //[SerializeField] private Button Testbt = null;
+    [SerializeField] private Button Testbt = null;
 
 
     /*이동함수 코로틴*/
-    public Coroutine moveOnCoroutine = null;
+    private Coroutine moveOnCoroutine = null;
 
 
-    public bool isMoving = false;
+    private bool isMoving = false;
 
-
-    private WSBMainGameController GameManager = null;
 
 
 
@@ -73,26 +68,19 @@ public class WSBCreature1 : MonoBehaviour
         OriginCreature1Tr = Cture1.transform.position;
 
         Cture1animator = GetComponent<Animator>();
-        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
-        Player = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
-        hpBar = GameObject.Find("hpmanager").GetComponent<WSBHpBar>();
+        control = GetComponent<WSBPlayerController>();
     }
 
     private void Start()
     {
+        Testbt.onClick.AddListener(TrChanged);
 
     }
 
     private void Update()
     {
-        if (GameManager.isRun)
-        {
-            TrChanged();
-            GameManager.isRun = false;
-        }
-
     }
-     
+
 
     //눈알아이템 작동하면 호출하게 함
     public void TrChanged()
@@ -115,13 +103,28 @@ public class WSBCreature1 : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
-         
+            //SetMoving(false);
+
+            isMoving = false;
+            Cture1animator.SetBool("isAttack", true);
             Player.Damage(damage);
-            Debug.Log("여기까지 왔음");
+
+            //Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
+            //navMeshAgent.isStopped = true;
+            //Player.Damage(damage);
+            //Debug.Log("여기까지 왔음");
             Debug.Log("크리처1한테 Damage입었다 현재 hp : " + Player.CurHp);
             //hpBar.UpdateHpBar(Player.MaxHp, Player.CurHp);
             //효과내는 코드를 여기서 추가
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            isMoving = true;
+            Cture1animator.SetBool("isAttack", false);
         }
     }
 
@@ -146,7 +149,7 @@ public class WSBCreature1 : MonoBehaviour
                 //Vector3 velocity = moveDirection * moveSpeed * Time.deltaTime;
                 //Cture1controller.Move(velocity);
                 Cture1animator.SetFloat("Blend", 0.5f,0f,Time.deltaTime);
-                //Cture1animator.speed = 2f;
+                Cture1animator.speed = 2f;
             }
             else
             {
@@ -172,9 +175,5 @@ public class WSBCreature1 : MonoBehaviour
         //    Debug.Log("moveOnCorourine been Stopped");
         //}
     }
-
-
-
-
 }
 

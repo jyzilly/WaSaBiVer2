@@ -28,19 +28,20 @@ public class Monster2_EX : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
-        animator = GetComponent<Animator>();
-        m_AudioSource = GetComponent<AudioSource>();
         image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
-        colorCreature = image.color;
+        m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
+        //navMeshAgent.speed = 120;
+        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
     }
 
 
     private void Start()
     {
+
+        animator = GetComponent<Animator>();
         navMeshAgent.SetDestination(waypoints[0].position);
-        //navMeshAgent.speed = 120;
-       
+       // m_AudioSource = GetComponent<AudioSource>();
+        colorCreature = image.color;
 
     }
 
