@@ -79,10 +79,10 @@ public class WSBCreature1 : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.isRun)
+        if (GameManager.isRun5)
         {
             TrChanged();
-            GameManager.isRun = false;
+            GameManager.isRun5 = false;
         }
     }
 

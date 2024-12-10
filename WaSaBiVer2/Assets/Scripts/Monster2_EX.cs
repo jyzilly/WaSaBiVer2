@@ -26,6 +26,10 @@ public class Monster2_EX : MonoBehaviour
 
     public Transform mazepoint;
 
+    public WSBMainGameController GM;
+    private WSBPlayerController PC;
+
+
     private void Awake()
     {
         //m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
@@ -42,6 +46,10 @@ public class Monster2_EX : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent.SetDestination(waypoints[0].position);
         colorCreature = image.color;
+        GM = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        PC = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
+
+
 
     }
 
@@ -53,9 +61,38 @@ public class Monster2_EX : MonoBehaviour
             navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
         }
 
-       
+        if(GM.isRun2)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
-        
+            Invoke("monster2_again", 3f);
+        }
+        else if(GM.isRun3)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+
+            Invoke("monster2_again", 3f);
+        }
+        else if(GM.isRun4)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+
+            Invoke("monster2_again", 3f);
+        }
+
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -105,7 +142,9 @@ public class Monster2_EX : MonoBehaviour
 
         Debug.Log(colorCreature.a);
 
-        player.transform.position = mazepoint.position;
+        PC.SetPosition(mazepoint.position);
+      
+        
         isTeleport = false;
         yield return null;
 
@@ -136,4 +175,13 @@ public class Monster2_EX : MonoBehaviour
         //m_AudioSource.PlayOneShot(footstep);
     }
 
+    void monster2_again()
+    {
+        Debug.Log("µµ¸Á ¼º°ø");
+        navMeshAgent.isStopped = false;
+        animator.SetBool("isItemUse", false);
+        GM.isRun2 = false;
+        GM.isRun3 = false;
+        GM.isRun4 = false;
+    }
 }

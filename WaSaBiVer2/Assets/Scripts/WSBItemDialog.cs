@@ -18,7 +18,7 @@ public class WSBItemDialog : MonoBehaviour
         ItemManager = GameObject.Find("ItemManager").GetComponent<WSBItemManager>();
     }
 
-    void Start()
+    private void Update()
     {
         bool isTalk = false;
 
@@ -66,12 +66,22 @@ public class WSBItemDialog : MonoBehaviour
             // 시작 시 대화 시작
             StartCoroutine(StartDialogue());
         }
+        ItemManager.isMemory1 = false;
+        ItemManager.isMemory2 = false;
+        ItemManager.isMemory3 = false;
+        ItemManager.isMemory4 = false;
+
+    }
+
+    private void Start()
+    {
+        
        
     }
 
     IEnumerator StartDialogue()
     {
-        yield return new WaitForSeconds(1f);  // 시작 대기시간 
+        //yield return new WaitForSeconds(1f);  // 시작 대기시간 
 
         // 대화 상자 활성화
         dialogueBox.SetActive(true);
@@ -79,9 +89,10 @@ public class WSBItemDialog : MonoBehaviour
         dialogueText.text = dialogueLines[currentLineIndex];
         yield return new WaitForEndOfFrame();
         // 3초 기둘
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         // 메인 씬으로 재전송
         dialogueBox.SetActive(false);
+       
 
     }
 }

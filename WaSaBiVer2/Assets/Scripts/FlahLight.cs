@@ -32,11 +32,10 @@ public class FlashLight : MonoBehaviour
 
     static internal void GetLight()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
+       
             useLight = true; //손전등을 획득했음을 알림
-            Destroy(GameObject.FindGameObjectWithTag("FlashLight")); //맵에 놓인 손전등 삭제          
-        }
+          //  Destroy(GameObject.FindGameObjectWithTag("FlashLight")); //맵에 놓인 손전등 삭제          
+        
     }
 
     void lightOnOFF()

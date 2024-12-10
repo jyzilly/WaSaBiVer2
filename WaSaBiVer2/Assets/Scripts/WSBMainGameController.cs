@@ -16,6 +16,10 @@ public class WSBMainGameController : MonoBehaviour
     public bool isSameItem_4 = false;
 
     public bool isRun = false;
+    public bool isRun2 = false;
+    public bool isRun3 = false;
+    public bool isRun4 = false;
+    public bool isRun5 = false;
 
 
 
@@ -69,19 +73,19 @@ public class WSBMainGameController : MonoBehaviour
                 if (PlayerController.isCreature2)
                 {
                     // 맞게 사용된 파티클 효과
-                    isRun = true;
+                    isRun2 = true;
                 }
                 else if (PlayerController.isCreature2_1)
                 {
                
                     // 맞게 사용된 파티클 효과
-                    isRun = true;
+                    isRun3 = true;
                 }
                 else if (PlayerController.isCreature2_2)
                 {
                    
                     // 맞게 사용된 파티클 효과
-                    isRun = true;
+                    isRun4 = true;
                 }
             }
             Invoke("OffItemPb", 1.5f);
@@ -102,7 +106,7 @@ public class WSBMainGameController : MonoBehaviour
                 {
                     
                     // 맞게 사용된 파티클 효과
-                    isRun = true;
+                    isRun5 = true;
                 }
             }
             Invoke("OffItemPb", 1.0f);

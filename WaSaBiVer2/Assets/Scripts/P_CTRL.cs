@@ -38,15 +38,15 @@ public class P_CTRL : MonoBehaviour
         {
             Debug.Log("닿임");
             //other.gameObject.SetActive(false);
-            // pd.Play(ta[0]);
+            pd.Play(ta[0]);
             control.isMovable = false;
             StartCoroutine(Pteleport());
         }
 
-        if (other.tag == "monster2")
-        {
-            //StartCoroutine(monsterAttackAni());
-        }
+        //if (other.tag == "monster2")
+        //{
+        //    //StartCoroutine(monsterAttackAni());
+        //}
         
     }
 
@@ -74,7 +74,8 @@ public class P_CTRL : MonoBehaviour
     {
         yield return new WaitForSeconds(4.0f);
         Debug.Log("끝");
-        transform.position = waypoint.position;
+        //transform.position = waypoint.position;
+        control.SetPosition(waypoint.position);
         control.isMovable = true;
         StartCountdown();
     }
@@ -93,7 +94,7 @@ public class P_CTRL : MonoBehaviour
     {
         float time = CountDown;
         //while 반복문 돌릴 변수는 카운트 다운 타임
-        while (time > 0)
+        while (time >= 0)
         {
             CountDownDisplay.text = Mathf.Ceil(time).ToString(); // 카운트다운 UI 업데이트
             yield return new WaitForSeconds(1f); //1초를 기다리고
@@ -101,9 +102,8 @@ public class P_CTRL : MonoBehaviour
         }
         if(time == 0)
         {
-            SceneManager.LoadScene("Wasabi 6");
+            SceneManager.LoadScene("Wassbi 6");
         }
-
     }
 
 }

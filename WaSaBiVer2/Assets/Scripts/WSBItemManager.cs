@@ -96,6 +96,7 @@ public class WSBItemManager : MonoBehaviour
     {
         GetItem();
         SetItemImg();
+        
 
         //if (Input.GetKeyDown(KeyCode.X))
         //{
@@ -227,12 +228,19 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if(hit.transform.gameObject.tag == "ExitDoor")
                 {
-                    if (memoryCnt > 2)
-                    { SceneManager.LoadScene("Wasabi 4"); }
-                    else if(memoryCnt<= 2)
-                    { SceneManager.LoadScene("Wasabi 5"); }
-                        
-                    
+                    if(memoryCnt > 2)
+                    {
+                        SceneManager.LoadScene("Wasabi 4");
+                    }
+                    else if(memoryCnt <=2)
+                    {
+                        SceneManager.LoadScene("Wasabi 5");
+                    }
+                }
+                else if (hit.transform.gameObject.tag == "FlashLight")
+                {
+                    FlashLight.GetLight();
+                    getItem = true;
                 }
 
 
@@ -382,8 +390,8 @@ public class WSBItemManager : MonoBehaviour
         for(int i = 0; i < 7; ++i)
         {
             
-            GameObject randomItem = Items[Random.Range(0, Items.Length)];
-            //GameObject randomItem = Items[2];
+            //GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            GameObject randomItem = Items[1];
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
         }
@@ -422,12 +430,12 @@ public class WSBItemManager : MonoBehaviour
         {
             //진엔딩
             ExitDoor.SetActive(true);
-        }        
+        }
         else if (keyCnt == 3 && memoryCnt <= 2)
         {
-            //배드엔딩
             ExitDoor.SetActive(true);
         }
+
     }
 
 
