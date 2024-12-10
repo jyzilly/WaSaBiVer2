@@ -88,15 +88,9 @@ public class WSBPlayerController : MonoBehaviour
 
     //public bool isMovable = false;
 
-    //구슬 던지는 것
-    [SerializeField] public GameObject blockball = null;
-    private Vector3 dir;
-    private float rx = 0f;
-    private float ry = 0f;
-    public float rotateSpeed ;
-    public Vector3 throwPower;
-    public Vector3 _dir;
 
+    public Vector3 _dir;
+    private Vector3 OriginTr;
 
 
 
@@ -128,11 +122,9 @@ public class WSBPlayerController : MonoBehaviour
         //mov = Vector3.zero;
         // gravity = 10f;
 
-        //구슬 던지는 것
-        rx = CamTr.transform.eulerAngles.x;
-        ry = CamTr.transform.eulerAngles.y;
+        OriginTr = CamTr.transform.position;
 
- 
+
     }
 
     private void Update()
@@ -161,6 +153,18 @@ public class WSBPlayerController : MonoBehaviour
         else
         {
             animator.SetBool("Jump", false);
+        }
+
+        if(Input.GetKey(KeyCode.F))
+        {
+            animator.SetBool("Down", true);
+            //CamTr.transform.position += _dir;
+            
+        }
+        else
+        {
+            animator.SetBool("Down", false);
+            //CamTr.transform.position = OriginTr;
         }
 
         //mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
@@ -207,8 +211,8 @@ public class WSBPlayerController : MonoBehaviour
             controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
 
 
-            float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
-            animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
+            float percent = ((run) ? 1 : 0.75f) * moveDirection.magnitude;
+            animator.SetFloat("Blend", percent, 0.25f, Time.deltaTime);
 
             CamTr = transform;
         }
@@ -284,7 +288,7 @@ public class WSBPlayerController : MonoBehaviour
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_1))
                 {
                     isCreature2_1 = true;
-
+                    Debug.Log("크리처2_1 발견");
                     break;
 
                 }
@@ -334,17 +338,7 @@ public class WSBPlayerController : MonoBehaviour
 
     /*여기까지*/
 
-    //public void CallBlockball()
-    //{
-    //    //구슬 던지는 것
-    //    blockball.transform.position = 
-    //    _dir = transform.TransformDirection(throwPower);
-    //    Debug.Log("_dir 좌표 : " + _dir);
-    //    blockball.GetComponent<Rigidbody>().useGravity = true;
-    //    blockball.GetComponent<Rigidbody>().AddForce(-dir, ForceMode.Impulse);
-    //    Debug.Log("blockball 위치" + blockball.transform.position);
 
-    //}
 
 
 

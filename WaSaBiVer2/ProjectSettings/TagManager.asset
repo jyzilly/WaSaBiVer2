@@ -22,6 +22,9 @@ TagManager:
   - Memory2
   - Memory3
   - Memory4
+  - pyramid
+  - plane
+  - ExitDoor
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class WSBItemManager : MonoBehaviour
 {
@@ -72,6 +73,7 @@ public class WSBItemManager : MonoBehaviour
     private int keyCnt = 0;
     private int memoryCnt = 0;
 
+    [SerializeField] private GameObject ExitDoor;
 
     private void Awake()
     {
@@ -222,6 +224,10 @@ public class WSBItemManager : MonoBehaviour
                     getItem = true;
                     isMemory4 = true;
 
+                }
+                else if(hit.transform.gameObject.tag == "ExitDoor")
+                {
+                    SceneManager.LoadScene("Wasabi 4");
                 }
 
 
@@ -405,11 +411,15 @@ public class WSBItemManager : MonoBehaviour
         if (keyCnt == 3 && memoryCnt == 2 || memoryCnt == 3 || memoryCnt == 4)
         {
             //굿엔딩
+            ExitDoor.SetActive(true);
         }
         else if (keyCnt == 3 && memoryCnt == 5)
         {
             //진엔딩
+            ExitDoor.SetActive(true);
         }
     }
+
+
 }
 

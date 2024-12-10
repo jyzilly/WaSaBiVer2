@@ -19,8 +19,9 @@ public class WSBCreature1 : MonoBehaviour
 
 
     /*플레이어 hp 관련 변수들 ---------------------------*/
-    [SerializeField] private WSBPlayerController Player = null;
-    [SerializeField] private WSBHpBar hpBar = null;
+    public WSBPlayerController Player = null;
+    public WSBHpBar hpBar = null;
+    public WSBMainGameController GameManager = null;
 
     [SerializeField, Range(0f, 50f)] private float damage = 30f;
     /*여기 까지 ---------------------------------------*/
@@ -29,19 +30,17 @@ public class WSBCreature1 : MonoBehaviour
     /*크리처1 위치 이동관한 변수들 ------------------*/
     [SerializeField] private GameObject Cture1 = null;
 
-    //원 위치를 저장
-    private Vector3 OriginCreature1Tr;
 
     ////이동할 위치를 넣어
     //private Transform Creature1Tr = null;
 
     //플레이어 근처 갔을 때 반경거리
-    private int distance = 5;
+    private int distance = 10;
     /*여기까지 -------------------------------------*/
 
 
     /*크리처1 이동에 관한 변수들 -----------*/
-    private float moveSpeed = 2f;
+    private float moveSpeed = 1f;
 
     /*여기까지 --------------------------*/
 
@@ -51,7 +50,7 @@ public class WSBCreature1 : MonoBehaviour
 
     //test용
     //[SerializeField] private GameObject Test1 = null;
-    [SerializeField] private Button Testbt = null;
+    //[SerializeField] private Button Testbt = null;
 
 
     /*이동함수 코로틴*/
@@ -62,13 +61,15 @@ public class WSBCreature1 : MonoBehaviour
 
 
 
-
     private void Awake()
     {
-        OriginCreature1Tr = Cture1.transform.position;
 
         Cture1animator = GetComponent<Animator>();
         control = GetComponent<WSBPlayerController>();
+
+        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        Player = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
+        hpBar = GameObject.Find("hpmanager").GetComponent<WSBHpBar>();
     }
 
     private void Start()
@@ -78,6 +79,11 @@ public class WSBCreature1 : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.isRun)
+        {
+            TrChanged();
+            GameManager.isRun = false;
+        }
     }
 
 
