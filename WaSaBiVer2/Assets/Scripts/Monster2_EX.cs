@@ -15,8 +15,6 @@ public class Monster2_EX : MonoBehaviour
     private Animator animator;
     AudioSource m_AudioSource;
 
-    public WSBMainGameController MainGM;
-
     bool isTeleport = false;
 
     public AudioClip footstep;
@@ -28,13 +26,14 @@ public class Monster2_EX : MonoBehaviour
 
     public Transform mazepoint;
 
-    public bool isrun;
+    public WSBMainGameController GM;
+    private WSBPlayerController PC;
+
 
     private void Awake()
     {
         //m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
         //navMeshAgent.speed = 120;
-        //MainGM = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
     }
 
 
@@ -47,55 +46,55 @@ public class Monster2_EX : MonoBehaviour
         animator = GetComponent<Animator>();
         navMeshAgent.SetDestination(waypoints[0].position);
         colorCreature = image.color;
+        GM = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        PC = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
+
+
+
     }
 
     private void Update()
     {
-        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
+        if(navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
         {
             m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
             navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
         }
 
-        //isrun = MainGM.isRun;
+        if(GM.isRun2)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
-        //if (MainGM.isRun)
-        //{
-        //    if (MainGM.isCreture2)
-        //    {
-        //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-        //        navMeshAgent.isStopped = true;
-        //        Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
-        //        animator.SetBool("isItemUse", true);
-        //        Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+            Invoke("monster2_again", 3f);
+        }
+        else if(GM.isRun3)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
-        //        Invoke("monster2_again", 3f);
-        //    }
-        //    else if(MainGM.isCreture2_1)
-        //    {
-        //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-        //        navMeshAgent.isStopped = true;
-        //        Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
-        //        animator.SetBool("isItemUse", true);
-        //        Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+            Invoke("monster2_again", 3f);
+        }
+        else if(GM.isRun4)
+        {
+            Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+            navMeshAgent.isStopped = true;
+            Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+            animator.SetBool("isItemUse", true);
+            Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
-        //        Invoke("monster2_again", 3f);
-        //    }
-        //    else if(MainGM.isCreture2_2)
-        //    {
-        //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-        //        navMeshAgent.isStopped = true;
-        //        Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
-        //        animator.SetBool("isItemUse", true);
-        //        Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+            Invoke("monster2_again", 3f);
+        }
 
-        //        Invoke("monster2_again", 3f);
-        //    }
-        //}
-        // Debug.Log(MainGM.isRun);
+
     }
-
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -103,30 +102,11 @@ public class Monster2_EX : MonoBehaviour
             monsterIsAttack();
             if (isTeleport) return;
             StartCoroutine(monsterAttackAni());
-            //animator.SetBool("isCrash", false);
-        }
-
-        if (other.CompareTag("Monster2_attack"))
-        {
-            if (navMeshAgent.isStopped) return;
-           
-            Debug.Log("Å©¸®Ã³2¹ß°ß");
-            Debug.Log("»óÅÂ" + MainGM.isRun.ToString());
-            Debug.Log(MainGM.isRun);
-            if (MainGM.isRun)
-            {
-                Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-                navMeshAgent.isStopped = true;
-                animator.SetBool("isItemUse", true);
-
-                Invoke("monster2_again", 3f);
-            }
-            return;
+            animator.SetBool("isCrash", false);
         }
 
     }
 
-   
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -162,7 +142,9 @@ public class Monster2_EX : MonoBehaviour
 
         Debug.Log(colorCreature.a);
 
-        player.transform.position = mazepoint.position;
+        PC.SetPosition(mazepoint.position);
+      
+        
         isTeleport = false;
         yield return null;
 
@@ -192,10 +174,14 @@ public class Monster2_EX : MonoBehaviour
         //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
         //m_AudioSource.PlayOneShot(footstep);
     }
+
     void monster2_again()
     {
         Debug.Log("µµ¸Á ¼º°ø");
         navMeshAgent.isStopped = false;
         animator.SetBool("isItemUse", false);
+        GM.isRun2 = false;
+        GM.isRun3 = false;
+        GM.isRun4 = false;
     }
 }

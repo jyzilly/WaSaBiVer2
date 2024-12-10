@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 [System.Serializable]
 public struct CastInfo
@@ -78,7 +79,7 @@ public class WSBPlayerController : MonoBehaviour
     /*여기까지 --------------------------------------*/
 
     [SerializeField] private WSBCreature1 Cture1;
-    [SerializeField] private WSBMainGameController mainGameManager;
+    private WSBMainGameController mainGameManager;
 
     public bool isSpider = false;
     public bool isCreature1 = false;
@@ -88,15 +89,9 @@ public class WSBPlayerController : MonoBehaviour
 
     //public bool isMovable = false;
 
-    //구슬 던지는 것
-    [SerializeField] public GameObject blockball = null;
-    private Vector3 dir;
-    private float rx = 0f;
-    private float ry = 0f;
-    public float rotateSpeed ;
-    public Vector3 throwPower;
-    public Vector3 _dir;
 
+    public Vector3 _dir;
+    private Vector3 OriginTr;
 
 
 
@@ -128,14 +123,12 @@ public class WSBPlayerController : MonoBehaviour
         //mov = Vector3.zero;
         // gravity = 10f;
 
-        //구슬 던지는 것
-        //rx = CamTr.transform.eulerAngles.x;
-        //ry = CamTr.transform.eulerAngles.y;
+        OriginTr = CamTr.transform.position;
 
- 
+
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
 
 
@@ -161,6 +154,18 @@ public class WSBPlayerController : MonoBehaviour
         else
         {
             animator.SetBool("Jump", false);
+        }
+
+        if(Input.GetKey(KeyCode.F))
+        {
+            animator.SetBool("Down", true);
+            //CamTr.transform.position += _dir;
+            
+        }
+        else
+        {
+            animator.SetBool("Down", false);
+            //CamTr.transform.position = OriginTr;
         }
 
         //mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
@@ -196,19 +201,25 @@ public class WSBPlayerController : MonoBehaviour
             Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 right = transform.TransformDirection(Vector3.right);
 
-            Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
+            Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical");// + right * Input.GetAxisRaw("Horizontal");
 
-            if (moveDirection.magnitude > 0)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
-            }
+            //if (moveDirection.magnitude > 0)
+            //if (moveDirection.x > 0f || moveDirection.x < 0f)
+            //{
+            //    Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
+            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
+            //}
+            float axisH = 0f;
+            if (Input.GetKey(KeyCode.A)) axisH = -1f *5;
+            else if (Input.GetKey(KeyCode.D)) axisH = 1f * 5;
+            transform.Rotate(transform.up, axisH);
 
-            controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
+            controller.SimpleMove(moveDirection.normalized * finalSpeed * Time.deltaTime);
+            //controller.SimpleMove(moveDirection.normalized * finalSpeed); // FixedUpdate -> Update
 
 
-            float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
-            animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
+            float percent = ((run) ? 1 : 0.75f) * moveDirection.magnitude;
+            animator.SetFloat("Blend", percent, 0.25f, Time.deltaTime);
 
             CamTr = transform;
         }
@@ -262,7 +273,7 @@ public class WSBPlayerController : MonoBehaviour
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
                     isSpider = true;
-                    Debug.Log("this is Spider");
+                    //Debug.Log("this is Spider");
 
 
                 }
@@ -275,28 +286,24 @@ public class WSBPlayerController : MonoBehaviour
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2")))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2))
                 {
                     isCreature2 = true;
-                    Debug.Log(isCreature2);
-                    Debug.Log("몬스터1발견");
+                    Debug.Log("크리처2 발견");
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2_1")))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_1))
                 {
-
                     isCreature2_1 = true;
-                    Debug.Log(isCreature2_1);
-                    Debug.Log("몬스터2발견");
+                    Debug.Log("크리처2_1 발견");
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2_2")))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_2))
                 {
                     isCreature2_2 = true;
-                    Debug.Log(isCreature2_2);
-                   Debug.Log("몬스터3발견");
+                    Debug.Log("크리처2_2 발견");
 
                     break;
                 }
@@ -307,7 +314,6 @@ public class WSBPlayerController : MonoBehaviour
                     isCreature2 = false;
                     isCreature2_1 = false;
                     isCreature2_2 = false;
-
                 }
             }
 
@@ -347,18 +353,13 @@ public class WSBPlayerController : MonoBehaviour
 
     /*여기까지*/
 
-    //public void CallBlockball()
-    //{
-    //    //구슬 던지는 것
-    //    blockball.transform.position = 
-    //    _dir = transform.TransformDirection(throwPower);
-    //    Debug.Log("_dir 좌표 : " + _dir);
-    //    blockball.GetComponent<Rigidbody>().useGravity = true;
-    //    blockball.GetComponent<Rigidbody>().AddForce(-dir, ForceMode.Impulse);
-    //    Debug.Log("blockball 위치" + blockball.transform.position);
-
-    //}
 
 
+    public void SetPosition(Vector3 _newPos)
+    {
+        controller.enabled = false;
+        transform.position = _newPos;
+        controller.enabled = true;
+    }
 
 }

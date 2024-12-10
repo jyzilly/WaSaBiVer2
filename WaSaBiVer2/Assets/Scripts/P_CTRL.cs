@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.Timeline;
 using UnityEngine.UI;
 
@@ -37,7 +38,7 @@ public class P_CTRL : MonoBehaviour
         {
             Debug.Log("닿임");
             //other.gameObject.SetActive(false);
-            // pd.Play(ta[0]);
+            pd.Play(ta[0]);
             control.isMovable = false;
             StartCoroutine(Pteleport());
         }
@@ -73,7 +74,8 @@ public class P_CTRL : MonoBehaviour
     {
         yield return new WaitForSeconds(4.0f);
         Debug.Log("끝");
-        transform.position = waypoint.position;
+        //transform.position = waypoint.position;
+        control.SetPosition(waypoint.position);
         control.isMovable = true;
         StartCountdown();
     }
@@ -98,7 +100,10 @@ public class P_CTRL : MonoBehaviour
             yield return new WaitForSeconds(1f); //1초를 기다리고
             time--; //1초씩 뺀다.
         }
-
+        if(time == 0)
+        {
+            SceneManager.LoadScene("Wassbi 6");
+        }
     }
 
 }
