@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class WSBCreature1 : MonoBehaviour
@@ -13,6 +14,8 @@ public class WSBCreature1 : MonoBehaviour
     //플레이어향해 쫓아가는 함수/ 작동방식 생각하기
 
     //순서는 눈알아이템 작동하면 플레이어 주변 위치로 이동하고 플레이어 쫓아가는 함수를 작동하면서 단 조건이 앞에 아무것도 없는 상황.만약에 결계구슬있으면 그 앞에 멈춰야 한다.
+
+    private WSBPlayerController control;
 
 
     /*플레이어 hp 관련 변수들 ---------------------------*/
@@ -33,19 +36,21 @@ public class WSBCreature1 : MonoBehaviour
     //private Transform Creature1Tr = null;
 
     //플레이어 근처 갔을 때 반경거리
-    private int distance = 10;
+    private int distance = 5;
     /*여기까지 -------------------------------------*/
 
 
     /*크리처1 이동에 관한 변수들 -----------*/
-    private float moveSpeed = 5f;
+    private float moveSpeed = 2f;
 
     /*여기까지 --------------------------*/
 
-
+    Animator Cture1animator;
+    CharacterController Cture1controller;
+    
 
     //test용
-    [SerializeField] private GameObject Test1 = null;
+    //[SerializeField] private GameObject Test1 = null;
     [SerializeField] private Button Testbt = null;
 
 
@@ -53,24 +58,26 @@ public class WSBCreature1 : MonoBehaviour
     private Coroutine moveOnCoroutine = null;
 
 
+    private bool isMoving = false;
+
+
 
 
     private void Awake()
     {
-        //Player = GetComponent<PlayerController>();
-        //Creature1Tr = GetComponent<Transform>();
-
         OriginCreature1Tr = Cture1.transform.position;
+
+        Cture1animator = GetComponent<Animator>();
+        control = GetComponent<WSBPlayerController>();
     }
 
     private void Start()
     {
-        Testbt.onClick.AddListener(TrChanged);
+
     }
 
     private void Update()
     {
-
     }
 
 
@@ -80,13 +87,14 @@ public class WSBCreature1 : MonoBehaviour
         //원래의 위피를 저장하고
         //OriginCreature1Tr = Creature1Tr.transform;
 
-        //플레이어의 근처로 이동하기 
-        //Cture1.transform.position = Player.transform.position + (new Vector3(Random.insideUnitSphere.x, 0f, Random.insideUnitSphere.z) * distance);
+        Debug.Log("Cture1.position" + transform.position);
 
-        //test용
-        Cture1.transform.position = Test1.transform.position + (new Vector3(Random.insideUnitSphere.x, 0f, Random.insideUnitSphere.z) * distance);
-        Debug.Log("이동 완료");
-        StartCoroutine(moveOn());
+        //플레이어의 근처로 이동하기 
+        transform.position = Player.transform.position + (new Vector3(Random.insideUnitSphere.x, 0f, Random.insideUnitSphere.z) * distance);
+
+        Debug.Log("이동 완료 Cture1의 위치" + transform.position);
+
+        moveOnCoroutine = StartCoroutine(moveOn());
     }
 
     //플레이어 부딪치면 플레이어의 hp 감소한다. 화면이 붉은 효과를 낸다. 
@@ -94,11 +102,28 @@ public class WSBCreature1 : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            //SetMoving(false);
+
+            isMoving = false;
+            Cture1animator.SetBool("isAttack", true);
             Player.Damage(damage);
-            Debug.Log("여기까지 왔음");
+
+            //Cture1animator.SetFloat("Blend", 1f, 0.5f, Time.deltaTime);
+            //navMeshAgent.isStopped = true;
+            //Player.Damage(damage);
+            //Debug.Log("여기까지 왔음");
             Debug.Log("크리처1한테 Damage입었다 현재 hp : " + Player.CurHp);
             //hpBar.UpdateHpBar(Player.MaxHp, Player.CurHp);
             //효과내는 코드를 여기서 추가
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            isMoving = true;
+            Cture1animator.SetBool("isAttack", false);
         }
     }
 
@@ -106,18 +131,48 @@ public class WSBCreature1 : MonoBehaviour
     //플레이어향해 지속적으로 이동 & 플레이어하고 마주치면 멈추고
     public IEnumerator moveOn()
     {
-        Cture1.transform.position = Vector3.MoveTowards(Cture1.transform.position, Player.transform.position, moveSpeed * Time.deltaTime);
-        yield return null;
+        isMoving = true;
+
+        while (true)
+        {
+            if (isMoving)
+            {
+                Vector3 moveDirection = (Player.transform.position - Cture1.transform.position).normalized;
+                //Vector3 targetPosition = Vector3.MoveTowards(Cture1.transform.position, Player.transform.position, moveSpeed * Time.deltaTime);
+                //Cture1.transform.position = targetPosition;
+                Cture1.transform.Translate(moveDirection * moveSpeed  * Time.deltaTime);
+
+                // 회전하는 부분. Point 1.
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * moveSpeed);
+
+                //Vector3 velocity = moveDirection * moveSpeed * Time.deltaTime;
+                //Cture1controller.Move(velocity);
+                Cture1animator.SetFloat("Blend", 0.5f,0f,Time.deltaTime);
+                Cture1animator.speed = 2f;
+            }
+            else
+            {
+                Cture1animator.SetFloat("Blend", 0f);
+
+            }
+
+            yield return null;
+        }
+    }
+
+    public void SetMoving(bool _isMoving)
+    {
+        isMoving = _isMoving;
     }
 
     public void StopmoveOnCoroutine()
     {
-        if (moveOnCoroutine != null)
-        {
-            StopCoroutine(moveOnCoroutine);
-            moveOnCoroutine = null;
-            Debug.Log("moveOnCorourine been Stopped");
-        }
+        //if (moveOnCoroutine != null)
+        //{
+        //    StopCoroutine(moveOnCoroutine);
+        //    moveOnCoroutine = null;
+        //    Debug.Log("moveOnCorourine been Stopped");
+        //}
     }
 }
 

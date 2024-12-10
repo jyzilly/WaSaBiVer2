@@ -1,106 +1,122 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-
-//요원(agent=enemy)에게 목적지를 알려줘서 목적지로 이동하게 한다.
-//상태를 만들어서 제어하고 싶다.
-// Idle : Player를 찾는다, 찾았으면 Run상태로 전이하고 싶다.
-//Run : 타겟방향으로 이동(요원)
-//Attack : 일정 시간마다 공격
+using UnityEngine.Animations;
 
 public class spider : MonoBehaviour
 {
+    private WSBItemManager ItemManager;
 
-    //목적지
-    public Transform target;
-    //요원
-    NavMeshAgent agent;
 
-    public Animator anim;
+    [SerializeField] private WSBPlayerController PlayerController = null;
+    [SerializeField] private WSBHpBar hpBar = null;
 
-    //열거형으로 정해진 상태값을 사용
-    enum State
+    private WSBMainGameController GameManager = null;
+
+    public NavMeshAgent navMeshAgent;
+    public Transform[] waypoints; // 경로 배열 설정
+    public Transform target; // 타겟 설정
+
+    private Animator animator;
+    int m_CurrentWaypointIndex; // 최근 경로 번호
+    private Transform searchTarget = null;
+
+    private void Awake()
     {
-        Idle,
-        Run,
-        Attack
-    }
-    //상태 처리
-    State state;
+        animator = GetComponent<Animator>();
+        target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
+        PlayerController = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
+        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //생성시 상태를 Idle로 한다.
-        state = State.Idle;
-
-        //요원을 정의해줘서
-        agent = GetComponent<NavMeshAgent>();
+        searchTarget = this.GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        //만약 state가 idle이라면
-        if (state == State.Idle)
+        navMeshAgent.SetDestination(waypoints[0].position); // 거미 시작점
+   
+    }
+
+    private void Update()
+    {
+
+        setDistance();
+        if (GameManager.isRun)
         {
-            UpdateIdle();
+            RunAway();
+            GameManager.isRun = false;
         }
-        else if (state == State.Run)
+        setDistance();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            UpdateRun();
+            target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
+            navMeshAgent.SetDestination(target.position);
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isAttack", true);
+
         }
-        else if (state == State.Attack)
+
+
+        // 아이템 사용 조건
+        /*
+            1. 거미 콜라이더에 플레이어가 있어야함
+            2. 플레이어가 조건에 맞는 아이템을 사용해야
+            3. 거미가 웨이포인트 0번으로 감
+         
+        */
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
         {
-            UpdateAttack();
+            target = null;
+            animator.SetBool("isWalk", true);
+            animator.SetBool("isAttack", false);
         }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+
+        if (other.CompareTag("Player"))
+        {
+            navMeshAgent.SetDestination(target.position);
+            animator.SetBool("isWalk", false);
+            animator.SetBool("isAttack", true);
+        }
+        
+
 
     }
 
-    private void UpdateAttack()
+    private void RunAway()
     {
-        agent.speed = 0;
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance > 2)
-        {
-            state = State.Run;
-            anim.SetTrigger("Run");
-        }
-    }
-
-    private void UpdateRun()
-    {
-
-
-        //남은 거리가 2미터라면 공격한다.
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= 2)
-        {
-            state = State.Attack;
-            anim.SetTrigger("Attack");
-        }
-
-        //타겟 방향으로 이동하다가
-        agent.speed = 3.5f;
-        //요원에게 목적지를 알려준다.
-        agent.destination = target.transform.position;
+        target = null;
+        animator.SetBool("isWalk", true);
+        animator.SetBool("isAttack", false);
 
     }
 
-    private void UpdateIdle()
+    public void attack()
     {
-        agent.speed = 0;
-        //생성될때 목적지(Player)를 찿는다.
-        target = GameObject.Find("Player").transform;
-        //target을 찾으면 Run상태로 전이하고 싶다.
-        if (target != null)
+        float damage = Random.Range(5f, 11f);
+        PlayerController.Damage(damage);
+        Debug.Log(PlayerController.CurHp);
+    }
+
+    private void setDistance()
+    {
+        if (navMeshAgent.remainingDistance < navMeshAgent.stoppingDistance)
         {
-            state = State.Run;
-            //이렇게 state값을 바꿨다고 animation까지 바뀔까? no! 동기화를 해줘야한다.
-            anim.SetTrigger("Run");
+            m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;
+            navMeshAgent.SetDestination(waypoints[m_CurrentWaypointIndex].position);
         }
     }
+
 }

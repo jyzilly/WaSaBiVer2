@@ -3,7 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - snow
+  - CutScene
+  - Creature1
+  - charm
+  - firecracker
+  - fire
+  - blockball
+  - Spider
+  - FlashLight
+  - Creature2
+  - monster2
+  - Creature2_1
+  - Creature2-2
+  - Key
+  - Memory
+  - Memory2
+  - Memory3
+  - Memory4
   layers:
   - Default
   - TransparentFX
@@ -12,10 +30,10 @@ TagManager:
   - Water
   - UI
   - Creature1
-  - 
-  - 
-  - 
-  - 
+  - Spider
+  - Creature2
+  - Creature2_1
+  - Creature2_2
   - 
   - 
   - 
