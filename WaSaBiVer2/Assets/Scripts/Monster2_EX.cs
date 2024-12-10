@@ -143,7 +143,7 @@ public class Monster2_EX : MonoBehaviour
         Debug.Log(colorCreature.a);
 
         PC.SetPosition(mazepoint.position);
-      
+        PC.Damage(30f);
         
         isTeleport = false;
         yield return null;

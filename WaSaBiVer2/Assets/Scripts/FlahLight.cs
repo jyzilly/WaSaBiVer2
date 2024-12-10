@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FlashLight : MonoBehaviour
 {
-    bool PlayerGetLight;
+    static bool PlayerGetLight;
     static bool useLight; //손전등 획득 여부를 확인할 변수
     Light myLight;
     // Start is called before the first frame update
@@ -33,9 +33,11 @@ public class FlashLight : MonoBehaviour
     static internal void GetLight()
     {
        
-            useLight = true; //손전등을 획득했음을 알림
-          //  Destroy(GameObject.FindGameObjectWithTag("FlashLight")); //맵에 놓인 손전등 삭제          
-        
+        useLight = true; //손전등을 획득했음을 알림
+                         //  Destroy(GameObject.FindGameObjectWithTag("FlashLight")); //맵에 놓인 손전등 삭제
+        PlayerGetLight = true;
+
+
     }
 
     void lightOnOFF()

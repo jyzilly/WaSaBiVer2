@@ -25,6 +25,7 @@ public class P_CTRL : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CountDownDisplay = null; // 카운트 ui
     private bool countdownStarted = false; // 카운트다운 시작 확인 기본은 off
 
+   // public int teleportCnt = 0;
 
     private void Start()
     {
@@ -78,6 +79,8 @@ public class P_CTRL : MonoBehaviour
         control.SetPosition(waypoint.position);
         control.isMovable = true;
         StartCountdown();
+
+        //teleportCnt += 1;
     }
 
     private void StartCountdown() //버튼 활성화 함수
