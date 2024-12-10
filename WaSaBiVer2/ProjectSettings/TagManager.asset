@@ -17,6 +17,11 @@ TagManager:
   - monster2
   - Creature2_1
   - Creature2-2
+  - Key
+  - Memory
+  - Memory2
+  - Memory3
+  - Memory4
   layers:
   - Default
   - TransparentFX
