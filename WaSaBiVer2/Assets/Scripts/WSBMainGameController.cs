@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -15,9 +16,14 @@ public class WSBMainGameController : MonoBehaviour
     public bool isSameItem_3 = false;
     public bool isSameItem_4 = false;
 
+    
+    public bool isCreture2 = false;
+    public bool isCreture2_1 = false;
+    public bool isCreture2_2 = false;
+
+
+  
     public bool isRun = false;
-
-
 
     private void Start()
     {
@@ -28,7 +34,7 @@ public class WSBMainGameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //거미
             ItemManager.PressedFireButton();
@@ -49,7 +55,7 @@ public class WSBMainGameController : MonoBehaviour
             }
             Invoke("OffItemPb", 1.5f);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             //할아버지
             ItemManager.PressedCharmButton();
@@ -57,38 +63,47 @@ public class WSBMainGameController : MonoBehaviour
 
 
         }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             //크리쳐 2
             ItemManager.PressedFirecrackerButton();
             if (ItemManager.item3Able)
             {
                 GameObject.Find("Ch46_nonPBR").transform.Find("firecake").transform.gameObject.SetActive(true);
+                Debug.Log("아이템 크리처 사용했음 3번" + ItemManager.item3Able.ToString());
+
                 ItemManager.item3Able = false;
                 
                 if (PlayerController.isCreature2)
                 {
+                    isCreture2 = true;
+                    Debug.Log("isCreature2");
                     // 맞게 사용된 파티클 효과
                     isRun = true;
+                  
                 }
                 else if (PlayerController.isCreature2_1)
                 {
-               
+                    isCreture2_1 = true;
+                    Debug.Log("isCreature2_1");
                     // 맞게 사용된 파티클 효과
                     isRun = true;
+                   
                 }
                 else if (PlayerController.isCreature2_2)
                 {
-                   
+                    isCreture2_2 = true;
+                    Debug.Log("isCreature2_2");
                     // 맞게 사용된 파티클 효과
                     isRun = true;
+                   
                 }
             }
             Invoke("OffItemPb", 1.5f);
 
 
         }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             // 크리쳐 1
             ItemManager.PressedBlockballButton();

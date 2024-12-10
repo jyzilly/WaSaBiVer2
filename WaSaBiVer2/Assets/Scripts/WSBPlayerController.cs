@@ -78,7 +78,7 @@ public class WSBPlayerController : MonoBehaviour
     /*여기까지 --------------------------------------*/
 
     [SerializeField] private WSBCreature1 Cture1;
-    private WSBMainGameController mainGameManager;
+    [SerializeField] private WSBMainGameController mainGameManager;
 
     public bool isSpider = false;
     public bool isCreature1 = false;
@@ -129,8 +129,8 @@ public class WSBPlayerController : MonoBehaviour
         // gravity = 10f;
 
         //구슬 던지는 것
-        rx = CamTr.transform.eulerAngles.x;
-        ry = CamTr.transform.eulerAngles.y;
+        //rx = CamTr.transform.eulerAngles.x;
+        //ry = CamTr.transform.eulerAngles.y;
 
  
     }
@@ -262,7 +262,7 @@ public class WSBPlayerController : MonoBehaviour
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
                     isSpider = true;
-                    //Debug.Log("this is Spider");
+                    Debug.Log("this is Spider");
 
 
                 }
@@ -275,27 +275,40 @@ public class WSBPlayerController : MonoBehaviour
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2")))
                 {
                     isCreature2 = true;
+                    Debug.Log(isCreature2);
+                    Debug.Log("몬스터1발견");
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_1))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2_1")))
                 {
-                    isCreature2_1 = true;
 
+                    isCreature2_1 = true;
+                    Debug.Log(isCreature2_1);
+                    Debug.Log("몬스터2발견");
                     break;
 
                 }
-                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_2))
+                else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, LayerMask.NameToLayer("Creature2_2")))
                 {
                     isCreature2_2 = true;
-
+                    Debug.Log(isCreature2_2);
+                   Debug.Log("몬스터3발견");
 
                     break;
                 }
-                
+                else
+                {
+                    isSpider = false;
+                    isCreature1 = false;
+                    isCreature2 = false;
+                    isCreature2_1 = false;
+                    isCreature2_2 = false;
+
+                }
             }
 
             if (isCatch) Cture1.SetMoving(false);

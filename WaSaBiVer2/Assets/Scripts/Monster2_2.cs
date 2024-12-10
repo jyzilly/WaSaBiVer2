@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public class Monster2_EX : MonoBehaviour
+public class Monster2_2 : MonoBehaviour
 {
     public Transform player = null;
     public NavMeshAgent navMeshAgent;
@@ -59,9 +59,20 @@ public class Monster2_EX : MonoBehaviour
 
         //isrun = MainGM.isRun;
 
-        //if (MainGM.isRun)
-        //{
-        //    if (MainGM.isCreture2)
+        if (MainGM.isRun)
+        {
+            if (MainGM.isCreture2)
+            {
+                Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+                navMeshAgent.isStopped = true;
+                Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
+                animator.SetBool("isItemUse", true);
+                Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
+
+                Invoke("monster2_again", 3f);
+            }
+        }
+        //    else if (MainGM.isCreture2_1)
         //    {
         //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
         //        navMeshAgent.isStopped = true;
@@ -71,17 +82,7 @@ public class Monster2_EX : MonoBehaviour
 
         //        Invoke("monster2_again", 3f);
         //    }
-        //    else if(MainGM.isCreture2_1)
-        //    {
-        //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-        //        navMeshAgent.isStopped = true;
-        //        Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
-        //        animator.SetBool("isItemUse", true);
-        //        Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
-
-        //        Invoke("monster2_again", 3f);
-        //    }
-        //    else if(MainGM.isCreture2_2)
+        //    else if (MainGM.isCreture2_2)
         //    {
         //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
         //        navMeshAgent.isStopped = true;
@@ -92,10 +93,10 @@ public class Monster2_EX : MonoBehaviour
         //        Invoke("monster2_again", 3f);
         //    }
         //}
-        // Debug.Log(MainGM.isRun);
+        //Debug.Log(MainGM.isRun);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -106,34 +107,33 @@ public class Monster2_EX : MonoBehaviour
             //animator.SetBool("isCrash", false);
         }
 
-        if (other.CompareTag("Monster2_attack"))
-        {
-            if (navMeshAgent.isStopped) return;
-           
-            Debug.Log("Å©¸®Ã³2¹ß°ß");
-            Debug.Log("»óÅÂ" + MainGM.isRun.ToString());
-            Debug.Log(MainGM.isRun);
-            if (MainGM.isRun)
-            {
-                Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-                navMeshAgent.isStopped = true;
-                animator.SetBool("isItemUse", true);
+        //if (other.CompareTag("Monster2_attack"))
+        //{
 
-                Invoke("monster2_again", 3f);
-            }
-            return;
-        }
+        //    Debug.Log("Å©¸®Ã³2¹ß°ß");
+        //    Debug.Log("»óÅÂ" + MainGM.isRun.ToString());
+        //    Debug.Log(isrun);
+        //    if (isrun)
+        //    {
+        //        Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
+        //        navMeshAgent.isStopped = true;
+        //        animator.SetBool("isItemUse", true);
+
+        //        Invoke("monster2_again", 3f);
+        //    }
+        //    return;
+        //}
 
     }
 
-   
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             animator.SetBool("isCrash", false);
             navMeshAgent.isStopped = false;
-        }    
+        }
     }
 
     IEnumerator monsterAttackAni()
@@ -146,8 +146,8 @@ public class Monster2_EX : MonoBehaviour
 
         while (colorCreature.a < 1f)
         {
-            
-            colorCreature.a += (Time.deltaTime)*1.2f / 1f;
+
+            colorCreature.a += (Time.deltaTime) * 1.2f / 1f;
             image.color = colorCreature;
             yield return new WaitForEndOfFrame();
             //break;
@@ -178,7 +178,7 @@ public class Monster2_EX : MonoBehaviour
     void monsterIsRun()
     {
         animator.SetBool("isRun", true);
-        
+
     }
 
     void monsterIsAttack()

@@ -42,10 +42,10 @@ public class P_CTRL : MonoBehaviour
             StartCoroutine(Pteleport());
         }
 
-        if (other.tag == "monster2")
-        {
-            //StartCoroutine(monsterAttackAni());
-        }
+        //if (other.tag == "monster2")
+        //{
+        //    //StartCoroutine(monsterAttackAni());
+        //}
         
     }
 
