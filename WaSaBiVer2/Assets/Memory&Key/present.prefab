@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 89d5e2f7bf8e74211aa883ab32ce4534, type: 3}
       propertyPath: m_TagString
-      value: Memory
+      value: Memory4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 89d5e2f7bf8e74211aa883ab32ce4534, type: 3}
       propertyPath: m_LocalPosition.x

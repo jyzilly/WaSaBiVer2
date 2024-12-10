@@ -51,6 +51,11 @@ public class WSBItemManager : MonoBehaviour
     public bool item4Able = false;
 
 
+    public bool isMemory1 = false;
+    public bool isMemory2 = false;
+    public bool isMemory3 = false;
+    public bool isMemory4 = false;
+
     // private bool PlayerGetLight; //true일 경우 손전등on
     // private Light myLight; //light 컴포넌트를 담는 변수
 
@@ -194,6 +199,29 @@ public class WSBItemManager : MonoBehaviour
                 {
                     memoryCnt += 1;
                     getItem = true;
+                    isMemory1 = true;
+                    
+                }
+                else if (hit.transform.gameObject.tag == "Memory2")
+                {
+                    memoryCnt += 1;
+                    getItem = true;
+                    isMemory2 = true;
+
+                }
+                else if (hit.transform.gameObject.tag == "Memory3")
+                {
+                    memoryCnt += 1;
+                    getItem = true;
+                    isMemory3 = true;
+
+                }
+                else if (hit.transform.gameObject.tag == "Memory4")
+                {
+                    memoryCnt += 1;
+                    getItem = true;
+                    isMemory4 = true;
+
                 }
 
 
