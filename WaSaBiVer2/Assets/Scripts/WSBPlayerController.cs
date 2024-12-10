@@ -25,9 +25,6 @@ public class WSBPlayerController : MonoBehaviour
     //private float mouseX;
     //private float mouseY = 0f;
 
-    private WSBMainGameController MainGM;
-
-    public bool isMovable = true;
 
     /*이동함수에 필요하는 변수들 --------------------*/
     [SerializeField] private float moveSpeed = 2;
@@ -67,7 +64,7 @@ public class WSBPlayerController : MonoBehaviour
     [SerializeField] private LayerMask Creature2_1;
     [SerializeField] private LayerMask Creature2_2;
 
-    
+
 
     //선으로 시야각 표시각도
     //[SerializeField, Range(0.1f, 1f)] private float angle;
@@ -86,11 +83,9 @@ public class WSBPlayerController : MonoBehaviour
     public bool isCreature2_1 = false;
     public bool isCreature2_2 = false;
 
-    //public bool isMovable = false;
+    public bool isMovable = false;
 
 
-    public Vector3 _dir;
-    private Vector3 OriginTr;
 
 
 
@@ -105,7 +100,6 @@ public class WSBPlayerController : MonoBehaviour
         Cture1 = GameObject.Find("BookHeadMonster").GetComponent<WSBCreature1>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
-        MainGM = GetComponent<WSBMainGameController>();
 
         //hp 초기화시키는 설정
         curHp = maxHp;
@@ -118,13 +112,9 @@ public class WSBPlayerController : MonoBehaviour
         StartCoroutine(CheckTarget());
         /*여기까지*/
 
-        //controller = GetComponent<CharacterController>();
-        //mov = Vector3.zero;
-        // gravity = 10f;
-
-        OriginTr = CamTr.transform.position;
 
 
+       
     }
 
     private void Update()
@@ -155,81 +145,49 @@ public class WSBPlayerController : MonoBehaviour
             animator.SetBool("Jump", false);
         }
 
-        if(Input.GetKey(KeyCode.F))
+        if (Input.GetKey(KeyCode.F))
         {
             animator.SetBool("Down", true);
-            //CamTr.transform.position += _dir;
-            
+
         }
         else
         {
             animator.SetBool("Down", false);
-            //CamTr.transform.position = OriginTr;
         }
-
-        //mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
-
-        //mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
-        //mouseY = Mathf.Clamp(mouseY, -50f, 30f);
-        //this.transform.localEulerAngles = new Vector3(-mouseY, mouseX, 0);
-
-        //if (controller.isGrounded)
-        //{
-        //    mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //    mov = controller.transform.TransformDirection(mov);
-        //}
-        //else
-        //{
-        //    mov.y -= gravity * Time.deltaTime;
-        //}
-
-        //controller.Move(mov * Time.deltaTime * speed);
-
-        //만약에 시야각에 크리처1 들어오면 크리처1 이동하는 함수 호출
-
+ 
     }
 
     //플레이어 이동하는 함수
     private void InputMovement()
     {
-        if (isMovable)
+        //run true이면 run속도로 바꾸기
+        finalSpeed = (run) ? runSpeed : moveSpeed;
+
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+        Vector3 right = transform.TransformDirection(Vector3.right);
+
+        Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
+
+        if (moveDirection.magnitude > 0)
         {
-            //run true이면 run속도로 바꾸기
-            finalSpeed = (run) ? runSpeed : moveSpeed;
-
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
-            Vector3 right = transform.TransformDirection(Vector3.right);
-
-            Vector3 moveDirection = forward * Input.GetAxisRaw("Vertical") + right * Input.GetAxisRaw("Horizontal");
-
-            if (moveDirection.magnitude > 0)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
-            }
-
-            controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
-
-
-            float percent = ((run) ? 1 : 0.75f) * moveDirection.magnitude;
-            animator.SetFloat("Blend", percent, 0.25f, Time.deltaTime);
-
-            CamTr = transform;
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
         }
-        else
-        {
-            return;
-        }
+
+        controller.Move(moveDirection.normalized * finalSpeed * Time.deltaTime);
+
+
+        float percent = ((run) ? 1 : 0.5f) * moveDirection.magnitude;
+        animator.SetFloat("Blend", percent, 0.1f, Time.deltaTime);
+
+        CamTr = transform;
     }
 
- 
+
 
     //플레이어 Hp 관한 함수. 데미지 입었을 때 hp감소하는 함수
     public void Damage(float _dmg)
     {
-        //MainGM.Prefabs[0].SetActive(true);
-        //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
-        //Debug.Log("들어옴");
         curHp -= _dmg;
         if (curHp < 0f)
         {
@@ -238,7 +196,6 @@ public class WSBPlayerController : MonoBehaviour
             Debug.Log("Player is Dead");
             SceneManager.LoadScene("Wasabi 6");
         }
-        //MainGM.Invoke("OffItemPb", 1.5f);
     }
 
 
@@ -253,12 +210,12 @@ public class WSBPlayerController : MonoBehaviour
             float tmpDist = 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
-
-            
             bool isCatch = false;
-             
 
-           ;
+
+
+
+            ;
 
             for (int i = 0; i < rayCount; ++i)
             {
@@ -266,13 +223,13 @@ public class WSBPlayerController : MonoBehaviour
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
                     isSpider = true;
-                    //Debug.Log("this is Spider");
+                    Debug.Log("this is Spider");
 
 
                 }
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature1))
                 {
-                    Debug.Log("Hit");
+                    //Debug.Log("Hit");
                     isCatch = true;
                     isCreature1 = true;
 
@@ -288,7 +245,7 @@ public class WSBPlayerController : MonoBehaviour
                 else if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Creature2_1))
                 {
                     isCreature2_1 = true;
-                    Debug.Log("크리처2_1 발견");
+
                     break;
 
                 }
@@ -299,7 +256,7 @@ public class WSBPlayerController : MonoBehaviour
 
                     break;
                 }
-                
+
             }
 
             if (isCatch) Cture1.SetMoving(false);
@@ -322,7 +279,7 @@ public class WSBPlayerController : MonoBehaviour
             int rayCount = Mathf.RoundToInt(viewAngle);
             for (int i = 0; i < rayCount; ++i)
             {
-                
+
                 Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
                 Debug.DrawLine(transform.position, transform.position + (dir * tmpDist), Color.green);
             }
@@ -332,11 +289,8 @@ public class WSBPlayerController : MonoBehaviour
         }
     }
 
-    
 
 
-
-    /*여기까지*/
 
 
 

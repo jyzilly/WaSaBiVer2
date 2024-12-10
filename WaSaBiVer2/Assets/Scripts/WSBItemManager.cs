@@ -70,7 +70,7 @@ public class WSBItemManager : MonoBehaviour
     [SerializeField] private GameObject[] KeyAndMemoryImgs;
 
 
-    private int keyCnt = 0;
+    public int keyCnt = 0;
     private int memoryCnt = 0;
 
     [SerializeField] private GameObject ExitDoor;
@@ -227,7 +227,12 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if(hit.transform.gameObject.tag == "ExitDoor")
                 {
-                    SceneManager.LoadScene("Wasabi 4");
+                    if (memoryCnt > 2)
+                    { SceneManager.LoadScene("Wasabi 4"); }
+                    else if(memoryCnt<= 2)
+                    { SceneManager.LoadScene("Wasabi 5"); }
+                        
+                    
                 }
 
 
@@ -408,7 +413,7 @@ public class WSBItemManager : MonoBehaviour
 
     private void CheckResult()
     {
-        if (keyCnt == 3 && memoryCnt == 2 || memoryCnt == 3 || memoryCnt == 4)
+        if (keyCnt == 3 && memoryCnt >= 3)
         {
             //굿엔딩
             ExitDoor.SetActive(true);
@@ -416,6 +421,11 @@ public class WSBItemManager : MonoBehaviour
         else if (keyCnt == 3 && memoryCnt == 5)
         {
             //진엔딩
+            ExitDoor.SetActive(true);
+        }        
+        else if (keyCnt == 3 && memoryCnt <= 2)
+        {
+            //배드엔딩
             ExitDoor.SetActive(true);
         }
     }
