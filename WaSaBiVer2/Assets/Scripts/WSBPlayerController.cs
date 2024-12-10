@@ -88,6 +88,17 @@ public class WSBPlayerController : MonoBehaviour
 
     //public bool isMovable = false;
 
+    //구슬 던지는 것
+    [SerializeField] public GameObject blockball = null;
+    private Vector3 dir;
+    private float rx = 0f;
+    private float ry = 0f;
+    public float rotateSpeed ;
+    public Vector3 throwPower;
+    public Vector3 _dir;
+
+
+
 
     private void Awake()
     {
@@ -97,6 +108,7 @@ public class WSBPlayerController : MonoBehaviour
     private void Start()
     {
         mainGameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        Cture1 = GameObject.Find("BookHeadMonster").GetComponent<WSBCreature1>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
         MainGM = GetComponent<WSBMainGameController>();
@@ -115,6 +127,12 @@ public class WSBPlayerController : MonoBehaviour
         //controller = GetComponent<CharacterController>();
         //mov = Vector3.zero;
         // gravity = 10f;
+
+        //구슬 던지는 것
+        rx = CamTr.transform.eulerAngles.x;
+        ry = CamTr.transform.eulerAngles.y;
+
+ 
     }
 
     private void Update()
@@ -244,7 +262,7 @@ public class WSBPlayerController : MonoBehaviour
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
                     isSpider = true;
-                    Debug.Log("this is Spider");
+                    //Debug.Log("this is Spider");
 
 
                 }
@@ -316,7 +334,17 @@ public class WSBPlayerController : MonoBehaviour
 
     /*여기까지*/
 
+    //public void CallBlockball()
+    //{
+    //    //구슬 던지는 것
+    //    blockball.transform.position = 
+    //    _dir = transform.TransformDirection(throwPower);
+    //    Debug.Log("_dir 좌표 : " + _dir);
+    //    blockball.GetComponent<Rigidbody>().useGravity = true;
+    //    blockball.GetComponent<Rigidbody>().AddForce(-dir, ForceMode.Impulse);
+    //    Debug.Log("blockball 위치" + blockball.transform.position);
 
+    //}
 
 
 

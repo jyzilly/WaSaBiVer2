@@ -1085,7 +1085,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5722322512515816427}
-  - component: {fileID: 4437463987360462654}
   - component: {fileID: 3552294757054351370}
   - component: {fileID: 3385066903088341519}
   - component: {fileID: 636808979605936684}
@@ -1115,32 +1114,6 @@ Transform:
   - {fileID: 8704122014780264738}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 210.22, z: 0}
---- !u!114 &4437463987360462654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4909511477448769873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d46be47180679c41b613deff3625be0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 3
-  runSpeed: 8
-  smoothness: 5
-  finalSpeed: 0
-  run: 1
-  CamTr: {fileID: 8704122014780264738}
-  maxHp: 100
-  viewRange: 10
-  viewAngle: 90
-  Creature1:
-    serializedVersion: 2
-    m_Bits: 64
-  lineList: []
-  Cture1: {fileID: 0}
 --- !u!143 &3552294757054351370
 CharacterController:
   m_ObjectHideFlags: 0

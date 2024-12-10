@@ -15,11 +15,6 @@ public class Monster2_EX : MonoBehaviour
     private Animator animator;
     AudioSource m_AudioSource;
 
-    //public GameObject m2;
-
-    private WSBMainGameController MainGM;
-
-
     bool isTeleport = false;
 
     public AudioClip footstep;
@@ -33,22 +28,21 @@ public class Monster2_EX : MonoBehaviour
 
     private void Awake()
     {
-        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
-        m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
+        //m_AudioSource = GameObject.Find("Demon_damaged").transform.Find("Demon").GetComponent<AudioSource>();
         //navMeshAgent.speed = 120;
-        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
-        MainGM = GetComponent<WSBMainGameController>();
     }
 
 
     private void Start()
     {
 
+        player = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
+        m_AudioSource = GetComponent<AudioSource>();
+        image = GameObject.Find("Canvas").transform.Find("ImageMain").GetComponent<Image>();
         animator = GetComponent<Animator>();
         navMeshAgent.SetDestination(waypoints[0].position);
-       // m_AudioSource = GetComponent<AudioSource>();
         colorCreature = image.color;
-        
+
     }
 
     private void Update()
@@ -71,18 +65,7 @@ public class Monster2_EX : MonoBehaviour
             monsterIsAttack();
             if (isTeleport) return;
             StartCoroutine(monsterAttackAni());
-           // animator.SetBool("isCrash", false);
-        }
-        else if(other.CompareTag("Monster2_attack"))
-        {
-            if (MainGM.isRun)
-            {
-                navMeshAgent.isStopped = true;
-                animator.SetBool("isItemUse", true);
-
-                Invoke("monster2_again", 3f);
-            }
-            return;
+            animator.SetBool("isCrash", false);
         }
 
     }
@@ -153,9 +136,4 @@ public class Monster2_EX : MonoBehaviour
         //m_AudioSource.PlayOneShot(footstep);
     }
 
-    void monster2_again()
-    {
-        navMeshAgent.isStopped = false;
-        animator.SetBool("isItemUse", false);
-    }
 }

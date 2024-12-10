@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //ObjectHit();
+        ObjectHit();
     }
 
     void ObjectHit()
