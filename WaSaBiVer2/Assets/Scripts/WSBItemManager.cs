@@ -72,6 +72,10 @@ public class WSBItemManager : MonoBehaviour
 
     [SerializeField] private GameObject ExitDoor;
 
+    private Vector3 DestroyTr;
+
+    public AudioClip[] itemsounds;
+
     private void Awake()
     {
     }
@@ -106,6 +110,9 @@ public class WSBItemManager : MonoBehaviour
                 if (hit.transform.gameObject.tag == "charm")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         CharmCnt += 1;
                         getItem = true;
@@ -116,6 +123,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "fire")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         FireCnt += 1;
                         getItem = true;
@@ -127,6 +137,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "firecracker")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         FirecrackerCnt += 1;
                         getItem = true;
@@ -138,6 +151,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "blockball")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         BlockballCnt += 1;
                         getItem = true;
@@ -148,6 +164,9 @@ public class WSBItemManager : MonoBehaviour
                 //소세지
                 else if (hit.transform.gameObject.tag == "Sausage")
                 {
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         SausageCnt += 1;
                         getItem = true;
@@ -156,6 +175,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Key")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     //key1의 이미지를 활성화하기
                     //
                     keyCnt += 1;
@@ -163,6 +185,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory1 = true;
@@ -170,6 +195,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory2")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory2 = true;
@@ -177,6 +205,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory3")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory3 = true;
@@ -184,6 +215,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory4")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory4 = true;
@@ -217,6 +251,9 @@ public class WSBItemManager : MonoBehaviour
                 {
                     UpdateItemCnt();
                     Destroy(hit.transform.gameObject);
+
+                    DestroyTr = hit.transform.position;
+                    Invoke("ReCreatItem", 30f);
                 }
                 Debug.Log("Key : " + keyCnt);
                 Debug.Log("Momory : " + memoryCnt);
@@ -228,7 +265,11 @@ public class WSBItemManager : MonoBehaviour
         CheckKeyCnt();
     }
 
-
+    private void ReCreatItem()
+    {
+        GameObject randomItem = Items[Random.Range(0, Items.Length)];
+        Instantiate(randomItem, DestroyTr, Quaternion.identity);
+    }
     private void UpdateItemCnt()
     {
         charmCnt.text = CharmCnt.ToString();
@@ -243,6 +284,9 @@ public class WSBItemManager : MonoBehaviour
     {
         if (FireCnt > 0)
         {
+            AudioClip Fire = itemsounds[0];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Fire, 0.8f);
             --FireCnt;
             UpdateItemCnt();
             item1Able = true;
@@ -272,6 +316,10 @@ public class WSBItemManager : MonoBehaviour
     {
         if (FirecrackerCnt > 0)
         {
+            AudioClip Firecracker = itemsounds[1];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Firecracker, 0.3f);
+            GetComponent<AudioSource>().Stop();
             --FirecrackerCnt;
             UpdateItemCnt();
             item3Able = true;
@@ -283,6 +331,9 @@ public class WSBItemManager : MonoBehaviour
     {
         if (BlockballCnt > 0)
         {
+            AudioClip Blockball = itemsounds[2];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Blockball, 0.8f);
             --BlockballCnt;
             UpdateItemCnt();
             item4Able = true;
@@ -294,6 +345,9 @@ public class WSBItemManager : MonoBehaviour
     {
         if(SausageCnt > 0)
         {
+            AudioClip Sausage = itemsounds[3];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Sausage, 0.8f);
             --SausageCnt;
             UpdateItemCnt();
             item5Able = true;
@@ -379,8 +433,8 @@ public class WSBItemManager : MonoBehaviour
         for (int i = 0; i < 7; ++i)
         {
 
-            //GameObject randomItem = Items[Random.Range(0, Items.Length)];
-            GameObject randomItem = Items[2];
+            GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            //GameObject randomItem = Items[2];
             Instantiate(randomItem, CreatItemTrs[i].position, Quaternion.identity);
 
         }

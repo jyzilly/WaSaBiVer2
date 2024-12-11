@@ -99,6 +99,15 @@ public class WSBPlayerController : MonoBehaviour
 
     Camera_W CM;
 
+    public AudioClip footLeft;
+    public AudioClip footRight;
+    public AudioClip SnowLeft;
+    public AudioClip SnowRight;
+
+    public bool isMain = false;
+
+    public AudioClip PlayerStep;
+
     private void Awake()
     {
 
@@ -151,27 +160,49 @@ public class WSBPlayerController : MonoBehaviour
         //이동하는  함수호출
         InputMovement();
 
-        //뛰기 조작키
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.W))
         {
-            animator.SetBool("Jump", true);
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            animator.SetBool("Walk", true);
         }
         else
         {
-            animator.SetBool("Jump", false);
+            animator.SetBool("Walk", false);
         }
 
-        if(Input.GetKey(KeyCode.F))
-        {
-            animator.SetBool("Down", true);
-            //CamTr.transform.position += _dir;
-            
-        }
-        else
-        {
-            animator.SetBool("Down", false);
-            //CamTr.transform.position = OriginTr;
-        }
+
+        //뛰기 조작키
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    animator.SetBool("Jump", true);
+        //}
+        //else
+        //{
+        //    animator.SetBool("Jump", false);
+        //}
+
+        //if(Input.GetKey(KeyCode.F))
+        //{
+        //    animator.SetBool("Down", true);
+        //    //CamTr.transform.position += _dir;
+
+        //}
+        //else
+        //{
+        //    animator.SetBool("Down", false);
+        //    //CamTr.transform.position = OriginTr;
+        //}
 
         //mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
 
@@ -195,6 +226,14 @@ public class WSBPlayerController : MonoBehaviour
 
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("snow"))
+        {
+            isMain = true;
+        }
+    }
+
     //플레이어 이동하는 함수
     private void InputMovement()
     {
@@ -215,8 +254,23 @@ public class WSBPlayerController : MonoBehaviour
             //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
             //}
             float axisH = 0f;
-            if (Input.GetKey(KeyCode.A)) axisH = -1f *5;
-            else if (Input.GetKey(KeyCode.D)) axisH = 1f * 5;
+            //if (Input.GetKey(KeyCode.A)) axisH = -1f *5;
+            //else if (Input.GetKey(KeyCode.D)) axisH = 1f * 5;
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                axisH = -1f * 5;
+                //animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                axisH = 1f * 5;
+                //animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
+            }
             transform.Rotate(transform.up, axisH);
 
             controller.SimpleMove(moveDirection.normalized * finalSpeed * Time.deltaTime);
@@ -380,5 +434,31 @@ public class WSBPlayerController : MonoBehaviour
         transform.position = _newPos;
         controller.enabled = true;
     }
+    void PlayerFootLeft()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowLeft);
+
+        // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
+        if (isMain)
+        {
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footLeft);
+        }
+    }
+
+    void PlayerFootRight()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowRight);
+        //AudioSource.PlayClipAtPoint(footRight, Camera.main.transform.position);
+        if (isMain)
+        {
+
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footRight);
+        }
+    }
+
 
 }

@@ -22,6 +22,10 @@ public class spider : MonoBehaviour
     int m_CurrentWaypointIndex; // 최근 경로 번호
     private Transform searchTarget = null;
 
+    public AudioClip[] Spidershout = null;
+
+    public AudioClip SpiderFoot;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -55,6 +59,10 @@ public class spider : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //AudioClip Spider = Spidershout[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Spider);
+
             target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
             navMeshAgent.SetDestination(target.position);
             animator.SetBool("isWalk", false);
@@ -120,4 +128,16 @@ public class spider : MonoBehaviour
         }
     }
 
+    private void Spiderfoot()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SpiderFoot);
+    }
+
+    private void attackSound()
+    {
+        AudioClip Spider = Spidershout[0];
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(Spider);
+    }
 }
