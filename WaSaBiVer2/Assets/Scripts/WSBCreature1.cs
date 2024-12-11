@@ -59,6 +59,9 @@ public class WSBCreature1 : MonoBehaviour
 
     private bool isMoving = false;
 
+    public AudioClip[] CtureShout = null;
+    public AudioClip monsterFoot;
+
 
 
     private void Awake()
@@ -139,6 +142,10 @@ public class WSBCreature1 : MonoBehaviour
     {
         isMoving = true;
 
+        AudioClip Creture1shout = CtureShout[0];
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(Creture1shout, 0.8f);
+
         while (true)
         {
             if (isMoving)
@@ -155,6 +162,7 @@ public class WSBCreature1 : MonoBehaviour
                 //Cture1controller.Move(velocity);
                 Cture1animator.SetFloat("Blend", 0.5f,0f,Time.deltaTime);
                 Cture1animator.speed = 2f;
+
             }
             else
             {
@@ -179,6 +187,12 @@ public class WSBCreature1 : MonoBehaviour
         //    moveOnCoroutine = null;
         //    Debug.Log("moveOnCorourine been Stopped");
         //}
+    }
+
+    void monster_foot()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(monsterFoot);
     }
 }
 

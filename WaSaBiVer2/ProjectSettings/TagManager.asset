@@ -25,6 +25,8 @@ TagManager:
   - pyramid
   - plane
   - ExitDoor
+  - Creature2_2
+  - Sausage
   layers:
   - Default
   - TransparentFX

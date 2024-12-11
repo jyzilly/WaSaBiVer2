@@ -93,8 +93,14 @@ public class WSBPlayerController : MonoBehaviour
     public Vector3 _dir;
     private Vector3 OriginTr;
 
+    public AudioClip footLeft;
+    public AudioClip footRight;
+    public AudioClip SnowLeft;
+    public AudioClip SnowRight;
 
+    public bool isMain = false;
 
+    public AudioClip PlayerStep;
     private void Awake()
     {
 
@@ -128,45 +134,66 @@ public class WSBPlayerController : MonoBehaviour
 
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
 
 
 
         //달리기 조작키
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            run = true;
-        }
-        else
-        {
-            run = false;
-        }
+        //if (Input.GetKey(KeyCode.LeftShift))
+        //{
+        //    run = true;
+        //}
+        //else
+        //{
+        //    run = false;
+        //}
 
         //이동하는  함수호출
         InputMovement();
 
-        //뛰기 조작키
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode. W))
         {
-            animator.SetBool("Jump", true);
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            animator.SetBool("Walk", true);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            animator.SetBool("Walk", true);
         }
         else
         {
-            animator.SetBool("Jump", false);
+            animator.SetBool("Walk", false);
         }
 
-        if(Input.GetKey(KeyCode.F))
-        {
-            animator.SetBool("Down", true);
-            //CamTr.transform.position += _dir;
+        ////뛰기 조작키
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    animator.SetBool("Jump", true);
+        //}
+        //else
+        //{
+        //    animator.SetBool("Jump", false);
+        //}
+
+        //if(Input.GetKey(KeyCode.F))
+        //{
+        //    animator.SetBool("Down", true);
+        //    //CamTr.transform.position += _dir;
             
-        }
-        else
-        {
-            animator.SetBool("Down", false);
-            //CamTr.transform.position = OriginTr;
-        }
+        //}
+        //else
+        //{
+        //    animator.SetBool("Down", false);
+        //    //CamTr.transform.position = OriginTr;
+        //}
 
         //mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
 
@@ -190,11 +217,21 @@ public class WSBPlayerController : MonoBehaviour
 
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("snow"))
+        {
+            isMain = true;
+        }
+    }
+
     //플레이어 이동하는 함수
     private void InputMovement()
     {
         if (isMovable)
         {
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(PlayerStep);
             //run true이면 run속도로 바꾸기
             finalSpeed = (run) ? runSpeed : moveSpeed;
 
@@ -210,8 +247,20 @@ public class WSBPlayerController : MonoBehaviour
             //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
             //}
             float axisH = 0f;
-            if (Input.GetKey(KeyCode.A)) axisH = -1f *5;
-            else if (Input.GetKey(KeyCode.D)) axisH = 1f * 5;
+            if (Input.GetKey(KeyCode.A))
+            {
+                axisH = -1f *5;
+                //animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                axisH = 1f * 5;
+                //animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
+            }
             transform.Rotate(transform.up, axisH);
 
             controller.SimpleMove(moveDirection.normalized * finalSpeed * Time.deltaTime);
@@ -246,6 +295,14 @@ public class WSBPlayerController : MonoBehaviour
             SceneManager.LoadScene("Wasabi 6");
         }
         //MainGM.Invoke("OffItemPb", 1.5f);
+    }
+
+    public void Heal(float _heal)
+    {
+        if (isDead) return;
+
+        curHp += _heal;
+        if (curHp > maxHp) curHp = maxHp;
     }
 
 
@@ -360,6 +417,32 @@ public class WSBPlayerController : MonoBehaviour
         controller.enabled = false;
         transform.position = _newPos;
         controller.enabled = true;
+    }
+
+    void PlayerFootLeft()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowLeft);
+       
+       // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
+       if (isMain)
+        {
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footLeft);
+        }
+    }
+
+    void PlayerFootRight()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowRight);
+        //AudioSource.PlayClipAtPoint(footRight, Camera.main.transform.position);
+        if (isMain)
+        {
+            
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footRight);
+        }
     }
 
 }

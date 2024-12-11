@@ -5,22 +5,13 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using NUnit.Framework.Internal;
 
 public class WSBItemManager : MonoBehaviour
 {
-    //아이템 습득하는 함수
-    //만약에 마우스로 아이템을 클릭하면 해당 아이템의 이름에  찾아가서 해당 아이템의 개수를 +1
-
-    //손전등. 항상 왼손에 들고 있고. on/off Input키를 추가해서 조명 끄고 키는 기능을 추가 
-    //부적. use를 bool로 설정해서 만약에 클릭했으면 개수 -1, 2초동안 부적타는효과를 활성화시킴, 이걸 사용했다는 걸 할아버지한테 전달하기 .
-    //if문으로 만약에 0개이상이면 클릭했을때 개수 -1,동시 사용했는 걸 할아버지한테 전달,0개이면 부적버튼을 비활성화시킨다.  
-    //불. if문으로 만약에 0개 이상이면 버튼 활성화 시키고 클릭했을 때 개수 -1,불 효과를 2초동안 활성화시킴, 거미줄 distroy함수를 사용해서 파괴시키기. 0개이면 버튼 비활성화로 시킴.  
-    //폭죽. if문으로 만약에 0개 이상이면 버튼 활성화 시키고 클릭했을 때 개수 -1,소리재생, 사용했다는 걸 크리처2한테 전달. 0개이면 버튼 비활성화로 시킴.
-    //결계구슬. if문으로 만약에 0개 이상이면 버튼 활성화 시키고 클릭했을 때 개수 -1 , 구슬이 플레이어 바라보는 시선에 생기기(아니면 좌표로 플레이어 앞에 일자로 나열하기), 전달없음
-
 
     //아이템 버튼 형식으로 표현
-    [SerializeField] private Button flash;
+    [SerializeField] private Button sausage;
     [SerializeField] private Button charm;
     [SerializeField] private Button fire;
     [SerializeField] private Button firecracker;
@@ -31,10 +22,11 @@ public class WSBItemManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fireCnt;
     [SerializeField] private TextMeshProUGUI firecrackerCnt;
     [SerializeField] private TextMeshProUGUI blockballCnt;
+    [SerializeField] private TextMeshProUGUI sausageCnt;
 
 
     //아이템 이미지 
-    [SerializeField] private Image flashImg;
+    [SerializeField] private Image sausageImg;
     [SerializeField] private Image charmImg;
     [SerializeField] private Image fireImg;
     [SerializeField] private Image firecrackerImg;
@@ -45,11 +37,13 @@ public class WSBItemManager : MonoBehaviour
     private int FireCnt = 0;
     private int FirecrackerCnt = 0;
     private int BlockballCnt = 0;
+    private int SausageCnt = 0;
 
     public bool item1Able = false;
     public bool item2Able = false;
     public bool item3Able = false;
     public bool item4Able = false;
+    public bool item5Able = false;
 
 
     public bool isMemory1 = false;
@@ -75,6 +69,9 @@ public class WSBItemManager : MonoBehaviour
 
     [SerializeField] private GameObject ExitDoor;
 
+    private Vector3 DestroyTr;
+
+    public AudioClip[] itemsounds;
     private void Awake()
     {
     }
@@ -83,54 +80,14 @@ public class WSBItemManager : MonoBehaviour
     {
         CreatItem();
         SetMK();
-        //fire.onClick.AddListener(PressedFireButton);
-        //charm.onClick.AddListener(PressedCharmButton);
-        //firecracker.onClick.AddListener(PressedFirecrackerButton);
-        //blockball.onClick.AddListener(PressedBlockballButton);
 
-        // PlayerGetLight = false; //초기에는 손전등의 불빛이 꺼진 상태
-        // myLight = this.GetComponent<Light>(); //오브젝트가 가진 light 컴포넌트를 가져옴.
     }
 
     private void Update()
     {
         GetItem();
         SetItemImg();
-        
 
-        //if (Input.GetKeyDown(KeyCode.X))
-        //{
-        //    PressedFireButton();
-        //}
-        //if(Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    PressedCharmButton();
-        //}
-        //if(Input.GetKeyDown(KeyCode.C))
-        //{
-        //    PressedFirecrackerButton();
-        //}
-        //if(Input.GetKeyDown(KeyCode.V))
-        //{
-        //    PressedBlockballButton();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    PlayerGetLight = PlayerGetLight ? false : true; //r키를 눌러 손전등의 불빛을 on/off
-        //}
-        //if (PlayerGetLight == false)
-        //{
-        //    myLight.intensity = 0; //손전등 off
-        //    flashImg.enabled = false;
-        //}
-
-
-        //if (PlayerGetLight == true)
-        //{
-        //    myLight.intensity = 10; //손전등 on
-        //    flashImg.enabled = true;
-        //}
 
 
     }
@@ -152,6 +109,9 @@ public class WSBItemManager : MonoBehaviour
                 if (hit.transform.gameObject.tag == "charm")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         CharmCnt += 1;
                         getItem = true;
@@ -162,6 +122,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "fire")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         FireCnt += 1;
                         getItem = true;
@@ -173,6 +136,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "firecracker")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         FirecrackerCnt += 1;
                         getItem = true;
@@ -184,6 +150,9 @@ public class WSBItemManager : MonoBehaviour
                 else if (hit.transform.gameObject.tag == "blockball")
                 {
                     //if (Input.GetMouseButtonDown(0))
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     {
                         BlockballCnt += 1;
                         getItem = true;
@@ -191,8 +160,23 @@ public class WSBItemManager : MonoBehaviour
 
                     }
                 }
+                //소세지
+                else if (hit.transform.gameObject.tag == "Sausage")
+                {
+                    AudioClip itemsound = itemsounds[4];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
+                    {
+                        SausageCnt += 1;
+                        getItem = true;
+
+                    }
+                }
                 else if (hit.transform.gameObject.tag == "Key")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     //key1의 이미지를 활성화하기
                     //
                     keyCnt += 1;
@@ -200,6 +184,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory1 = true;
@@ -207,6 +194,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory2")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory2 = true;
@@ -214,6 +204,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory3")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory3 = true;
@@ -221,6 +214,9 @@ public class WSBItemManager : MonoBehaviour
                 }
                 else if (hit.transform.gameObject.tag == "Memory4")
                 {
+                    AudioClip itemsound = itemsounds[5];
+                    GetComponent<AudioSource>().Stop();
+                    GetComponent<AudioSource>().PlayOneShot(itemsound, 0.8f);
                     memoryCnt += 1;
                     getItem = true;
                     isMemory4 = true;
@@ -246,8 +242,13 @@ public class WSBItemManager : MonoBehaviour
 
                 if (getItem == true)
                 {
+
                     UpdateItemCnt();
                     Destroy(hit.transform.gameObject);
+
+                    DestroyTr = hit.transform.position;
+                    Invoke("ReCreatItem",30f);
+
                 }
                 Debug.Log("Key : " + keyCnt);
                 Debug.Log("Momory : " + memoryCnt);
@@ -259,6 +260,11 @@ public class WSBItemManager : MonoBehaviour
         CheckKeyCnt();
     }
 
+    private void ReCreatItem()
+    {
+        GameObject randomItem = Items[Random.Range(0, Items.Length)];
+        Instantiate(randomItem, DestroyTr, Quaternion.identity);
+    }
 
     private void UpdateItemCnt()
     {
@@ -266,12 +272,16 @@ public class WSBItemManager : MonoBehaviour
         fireCnt.text = FireCnt.ToString();
         firecrackerCnt.text = FirecrackerCnt.ToString();
         blockballCnt.text = BlockballCnt.ToString();
+        sausageCnt.text = SausageCnt.ToString();
     }
 
     public void PressedFireButton()
     {
         if (FireCnt > 0)
         {
+            AudioClip Fire = itemsounds[0];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Fire, 0.8f);
             --FireCnt;
             UpdateItemCnt();
             item1Able = true;
@@ -301,6 +311,10 @@ public class WSBItemManager : MonoBehaviour
     {
         if (FirecrackerCnt > 0)
         {
+            AudioClip Firecracker = itemsounds[1];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Firecracker, 0.3f);
+            GetComponent<AudioSource>().Stop();
             --FirecrackerCnt;
             UpdateItemCnt();
             item3Able = true;
@@ -312,12 +326,31 @@ public class WSBItemManager : MonoBehaviour
     {
         if (BlockballCnt > 0)
         {
+            AudioClip Blockball = itemsounds[2];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Blockball, 0.8f);
             --BlockballCnt;
             UpdateItemCnt();
             item4Able = true;
 
         }
     }
+
+    public void PressedSausageButton()
+    {
+        if (SausageCnt > 0)
+        {
+            AudioClip Sausage = itemsounds[3];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Sausage, 0.8f);
+            --SausageCnt;
+            UpdateItemCnt();
+            item5Able = true;
+
+        }
+    }
+
+
 
     private void SetItemImg()
     {
@@ -352,6 +385,14 @@ public class WSBItemManager : MonoBehaviour
         else
         {
             blockballImg.enabled = true;
+        }
+        if(SausageCnt == 0)
+        {
+            sausageImg.enabled = false;
+        }
+        else
+        {
+            sausageImg.enabled = true;
         }
 
 
@@ -390,8 +431,8 @@ public class WSBItemManager : MonoBehaviour
         for(int i = 0; i < 7; ++i)
         {
             
-            //GameObject randomItem = Items[Random.Range(0, Items.Length)];
-            GameObject randomItem = Items[1];
+            GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            //GameObject randomItem = Items[3];
             Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
 
         }

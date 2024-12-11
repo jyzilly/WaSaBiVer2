@@ -17,7 +17,7 @@ public class Monster2_EX : MonoBehaviour
 
     bool isTeleport = false;
 
-    public AudioClip footstep;
+    public AudioClip[] Creature2Sound;
     //public AudioClip snowstep;
 
     public Image image;
@@ -63,6 +63,9 @@ public class Monster2_EX : MonoBehaviour
 
         if(GM.isRun2)
         {
+            AudioClip Cture2shout = Creature2Sound[0];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             navMeshAgent.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
@@ -73,6 +76,9 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun3)
         {
+            AudioClip Cture2_1shout = Creature2Sound[0];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Cture2_1shout,0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             navMeshAgent.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
@@ -83,10 +89,15 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun4)
         {
+            AudioClip Cture2_2shout = Creature2Sound[0];
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(Cture2_2shout,0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             navMeshAgent.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
             animator.SetBool("isItemUse", true);
+            //GetComponent<AudioSource>().Stop();
+
             Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
             Invoke("monster2_again", 3f);
@@ -171,7 +182,9 @@ public class Monster2_EX : MonoBehaviour
 
     public void FootStep()
     {
-        //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
+        AudioClip footStep = Creature2Sound[1];
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(footStep);
         //m_AudioSource.PlayOneShot(footstep);
     }
 
