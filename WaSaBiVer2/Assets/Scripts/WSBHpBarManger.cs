@@ -10,11 +10,12 @@ public class WSBHpBarManger : MonoBehaviour
     private WSBHpBar hpBar = null;
 
     private float damage;
-
+    private float heal;
     private void Update()
     {
 
         player.Damage(damage);
+        player.Heal(heal);
         hpBar.UpdateHpBar(player.MaxHp, player.CurHp);
 
 

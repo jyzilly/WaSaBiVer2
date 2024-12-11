@@ -32,7 +32,7 @@ public class WSBMainGameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Keypad1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //거미
             ItemManager.PressedFireButton();
@@ -53,7 +53,7 @@ public class WSBMainGameController : MonoBehaviour
             }
             Invoke("OffItemPb", 1.5f);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             //할아버지
             ItemManager.PressedCharmButton();
@@ -61,7 +61,7 @@ public class WSBMainGameController : MonoBehaviour
 
 
         }
-        if (Input.GetKeyDown(KeyCode.Keypad3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             //크리쳐 2
             ItemManager.PressedFirecrackerButton();
@@ -92,7 +92,7 @@ public class WSBMainGameController : MonoBehaviour
 
 
         }
-        if (Input.GetKeyDown(KeyCode.Keypad4))
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             // 크리쳐 1
             ItemManager.PressedBlockballButton();
@@ -111,6 +111,17 @@ public class WSBMainGameController : MonoBehaviour
             }
             Invoke("OffItemPb", 1.0f);
 
+        }
+        if(Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            ItemManager.PressedSausageButton();
+            if(ItemManager.item5Able)
+            {
+                float heal = 20f;
+                PlayerController.Heal(heal);
+                Debug.Log("현재 HP : " + PlayerController.CurHp.ToString());
+                
+            }
         }
     }
 

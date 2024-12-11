@@ -22,6 +22,9 @@ TagManager:
   - Memory2
   - Memory3
   - Memory4
+  - ExitDoor
+  - Creature2_2
+  - Letter
   layers:
   - Default
   - TransparentFX
