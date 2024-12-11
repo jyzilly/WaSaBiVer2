@@ -238,6 +238,8 @@ public class WSBPlayerController : MonoBehaviour
         //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
         //Debug.Log("µé¾î¿È");
         curHp -= _dmg;
+        GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+
         if (curHp < 0f)
         {
             curHp = 0f;
@@ -245,7 +247,7 @@ public class WSBPlayerController : MonoBehaviour
             Debug.Log("Player is Dead");
             SceneManager.LoadScene("Wasabi 6");
         }
-        //MainGM.Invoke("OffItemPb", 1.5f);
+        MainGM.Invoke("OffItemPb", 1.5f);
     }
 
 

@@ -98,7 +98,7 @@ public class WSBMainGameController : MonoBehaviour
             ItemManager.PressedBlockballButton();
             if (ItemManager.item4Able)
             {
-                GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+                //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
                 Debug.Log("ป๓ลย" + ItemManager.item1Able.ToString());
                 ItemManager.item4Able = false;
 
@@ -109,7 +109,7 @@ public class WSBMainGameController : MonoBehaviour
                     isRun5 = true;
                 }
             }
-            Invoke("OffItemPb", 1.0f);
+            //Invoke("OffItemPb", 1.0f);
 
         }
     }
