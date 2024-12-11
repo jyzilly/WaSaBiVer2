@@ -25,7 +25,7 @@ public class WSBItemManager : MonoBehaviour
 
 
     //아이템 이미지 
-    [SerializeField] private Image flashImg;
+    [SerializeField] private Image sausageImg;
     [SerializeField] private Image charmImg;
     [SerializeField] private Image fireImg;
     [SerializeField] private Image firecrackerImg;
@@ -290,6 +290,16 @@ public class WSBItemManager : MonoBehaviour
         }
     }
 
+    public void PressedSausageButton()
+    {
+        if(SausageCnt > 0)
+        {
+            --SausageCnt;
+            UpdateItemCnt();
+            item5Able = true;
+        }
+    }
+
     private void SetItemImg()
     {
         if (CharmCnt == 0)
@@ -369,8 +379,8 @@ public class WSBItemManager : MonoBehaviour
         for (int i = 0; i < 7; ++i)
         {
 
-            GameObject randomItem = Items[Random.Range(0, Items.Length)];
-            //GameObject randomItem = Items[3];
+            //GameObject randomItem = Items[Random.Range(0, Items.Length)];
+            GameObject randomItem = Items[2];
             Instantiate(randomItem, CreatItemTrs[i].position, Quaternion.identity);
 
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 [System.Serializable]
 public struct CastInfo
@@ -26,7 +27,7 @@ public class WSBPlayerController : MonoBehaviour
     //private float mouseX;
     //private float mouseY = 0f;
 
-    private WSBMainGameController MainGM;
+    public WSBMainGameController MainGM;
 
     public bool isMovable = true;
 
@@ -93,7 +94,10 @@ public class WSBPlayerController : MonoBehaviour
     public Vector3 _dir;
     private Vector3 OriginTr;
 
+    [SerializeField]
+    private GameObject blood;
 
+    Camera_W CM;
 
     private void Awake()
     {
@@ -106,7 +110,8 @@ public class WSBPlayerController : MonoBehaviour
         Cture1 = GameObject.Find("BookHeadMonster").GetComponent<WSBCreature1>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
-        MainGM = GetComponent<WSBMainGameController>();
+        //MainGM = GetComponent<WSBMainGameController>();
+        CM = GameObject.FindWithTag("CM").GetComponent<Camera_W>();
 
         //hp 초기화시키는 설정
         curHp = maxHp;
@@ -238,16 +243,21 @@ public class WSBPlayerController : MonoBehaviour
         //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
         //Debug.Log("들어옴");
         curHp -= _dmg;
-        GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
-
+        // GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+        
+        if (_dmg > 0)
+        {
+            blood.SetActive(true);
+           // CM.VivrateForTime(0.1f);
+            mainGameManager.Invoke("OffItemPb", 0.1f);
+        }
         if (curHp < 0f)
         {
             curHp = 0f;
             isDead = true;
             Debug.Log("Player is Dead");
-            SceneManager.LoadScene("Wasabi 6");
+            //SceneManager.LoadScene("Wasabi 6");
         }
-        MainGM.Invoke("OffItemPb", 1.5f);
     }
 
     public void Heal(float _heal)
@@ -266,7 +276,7 @@ public class WSBPlayerController : MonoBehaviour
         {
 
             float tmpAngle = viewAngle * 0.5f;
-            float tmpDist = 3f;
+            float tmpDist = viewRange * 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
 
@@ -274,15 +284,15 @@ public class WSBPlayerController : MonoBehaviour
             bool isCatch = false;
              
 
-           ;
+           
 
             for (int i = 0; i < rayCount; ++i)
             {
                 Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
+                    Debug.Log("this is Spider");
                     isSpider = true;
-                    //Debug.Log("this is Spider");
 
 
                 }
@@ -318,7 +328,7 @@ public class WSBPlayerController : MonoBehaviour
                 }
                 else
                 {
-                    isSpider = false;
+                    
                     isCreature1 = false;
                     isCreature2 = false;
                     isCreature2_1 = false;
@@ -341,7 +351,7 @@ public class WSBPlayerController : MonoBehaviour
             lineList.Clear();
 
             float tmpAngle = viewAngle * 0.5f;
-            float tmpDist = 3f;
+            float tmpDist = viewRange * 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
             for (int i = 0; i < rayCount; ++i)

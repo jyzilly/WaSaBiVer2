@@ -97,7 +97,7 @@ public class P_CTRL : MonoBehaviour
     {
         float time = CountDown;
         //while 반복문 돌릴 변수는 카운트 다운 타임
-        while (time >= 0)
+        while (time > 0)
         {
             CountDownDisplay.text = Mathf.Ceil(time).ToString(); // 카운트다운 UI 업데이트
             yield return new WaitForSeconds(1f); //1초를 기다리고
@@ -105,7 +105,7 @@ public class P_CTRL : MonoBehaviour
         }
         if(time == 0)
         {
-            SceneManager.LoadScene("Wassbi 6");
+            SceneManager.LoadScene("Wasabi 6");
         }
     }
 

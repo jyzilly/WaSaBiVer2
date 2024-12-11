@@ -13,13 +13,10 @@ EditorBuildSettings:
     guid: d3e1107f5de289b45a0c926070e8a709
   - enabled: 1
     path: Assets/Scenes/Wasabi 3.unity
-    guid: 81273dbcb1f0d4f4786487263ac16c72
+    guid: 64533d1c6bb1f334cb31dca4b548e54a
   - enabled: 1
     path: Assets/Scenes/Wasabi 4.unity
     guid: b18f345a02a9cad4db707fd3fedaf8a8
-  - enabled: 1
-    path: Assets/Scenes/Wasabi 5.unity
-    guid: 3446d4410cb5b5946bdae29561622edd
   - enabled: 1
     path: Assets/Scenes/Wasabi 5.unity
     guid: 1c010f20b01238544ac2d570dfedf202

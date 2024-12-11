@@ -11,7 +11,7 @@ public class WSBMoveToSquare : MonoBehaviour
 
     private void Start()
     {
-       
+     //  GameObject.FindGameObjectWithTag("CutScene").SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -19,8 +19,10 @@ public class WSBMoveToSquare : MonoBehaviour
         if(itemManager.keyCnt == 3)
         {
             isReturn = false;
+            GameObject.FindGameObjectWithTag("CutScene").SetActive(false);
+            player.SetPosition(SquareTr.position);
 
-            player.transform.position = SquareTr.position; ;
+            //player.transform.position = SquareTr.position; ;
         }
         else if(other.tag == "Player")
         {

@@ -29,6 +29,8 @@ public class Monster2_EX : MonoBehaviour
     public WSBMainGameController GM;
     private WSBPlayerController PC;
 
+    GameObject mm;
+    public NavMeshAgent dd;
 
     private void Awake()
     {
@@ -49,7 +51,8 @@ public class Monster2_EX : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
         PC = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
 
-
+        GameObject mm = GameObject.FindGameObjectWithTag("Creature2");
+        NavMeshAgent dd = mm.GetComponent<NavMeshAgent>();
 
     }
 
@@ -84,7 +87,8 @@ public class Monster2_EX : MonoBehaviour
         else if(GM.isRun4)
         {
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-            navMeshAgent.isStopped = true;
+            //navMeshAgent.isStopped = true;
+            dd.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
             animator.SetBool("isItemUse", true);
             Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
@@ -112,6 +116,7 @@ public class Monster2_EX : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animator.SetBool("isCrash", false);
+          
             navMeshAgent.isStopped = false;
         }    
     }
@@ -143,7 +148,7 @@ public class Monster2_EX : MonoBehaviour
         Debug.Log(colorCreature.a);
 
         PC.SetPosition(mazepoint.position);
-        PC.Damage(30f);
+        
         
         isTeleport = false;
         yield return null;
@@ -166,6 +171,7 @@ public class Monster2_EX : MonoBehaviour
     void monsterIsAttack()
     {
         animator.SetBool("isCrash", true);
+        PC.Damage(30f);
         navMeshAgent.isStopped = true;
     }
 

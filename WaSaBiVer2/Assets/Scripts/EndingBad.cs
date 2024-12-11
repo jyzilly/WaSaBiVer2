@@ -98,7 +98,7 @@ public class EndingBad : MonoBehaviour
             // 게임 오버라서 게임 재시작
             if (currentLineIndex >= dialogueLines.Length)
             {
-                SceneManager.LoadScene("Wasabi 3");
+                SceneManager.LoadScene("Wasabi 1");
             }
         }
     }

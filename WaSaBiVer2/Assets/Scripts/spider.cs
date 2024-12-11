@@ -12,7 +12,7 @@ public class spider : MonoBehaviour
     [SerializeField] private WSBPlayerController PlayerController = null;
     [SerializeField] private WSBHpBar hpBar = null;
 
-    private WSBMainGameController GameManager = null;
+    [SerializeField] private WSBMainGameController GameManager;
 
     public NavMeshAgent navMeshAgent;
     public Transform[] waypoints; // 경로 배열 설정
@@ -27,7 +27,7 @@ public class spider : MonoBehaviour
         animator = GetComponent<Animator>();
         target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
         PlayerController = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
-        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        //GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
 
         searchTarget = this.GetComponent<Transform>();
     }
@@ -40,12 +40,13 @@ public class spider : MonoBehaviour
 
     private void Update()
     {
-
+       
         setDistance();
         if (GameManager.isRun)
         {
             RunAway();
             GameManager.isRun = false;
+            PlayerController.isSpider = false;
         }
         setDistance();
     }
