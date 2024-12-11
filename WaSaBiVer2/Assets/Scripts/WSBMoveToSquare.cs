@@ -6,6 +6,8 @@ public class WSBMoveToSquare : MonoBehaviour
     [SerializeField] private WSBPlayerController player;
     [SerializeField] private Transform SquareTr;
 
+    public bool isReturn = false;
+
 
     private void Start()
     {
@@ -16,10 +18,13 @@ public class WSBMoveToSquare : MonoBehaviour
     {
         if(itemManager.keyCnt == 3)
         {
+            isReturn = false;
+
             player.transform.position = SquareTr.position; ;
         }
-        else
+        else if(other.tag == "Player")
         {
+            isReturn = true;
             Debug.Log("열쇠 3개 모아서 다시 여기로 오세요.");
         }
     }

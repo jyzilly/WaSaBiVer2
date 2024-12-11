@@ -250,6 +250,13 @@ public class WSBPlayerController : MonoBehaviour
         MainGM.Invoke("OffItemPb", 1.5f);
     }
 
+    public void Heal(float _heal)
+    {
+        if (isDead) return;
+
+        curHp += _heal;
+        if (curHp > maxHp) curHp = maxHp;
+    }
 
     /*시야각 함수들*/
     public IEnumerator CheckTarget()
