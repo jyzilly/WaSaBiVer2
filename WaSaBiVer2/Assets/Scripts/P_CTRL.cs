@@ -25,6 +25,7 @@ public class P_CTRL : MonoBehaviour
     [SerializeField] private TextMeshProUGUI CountDownDisplay = null; // 카운트 ui
     private bool countdownStarted = false; // 카운트다운 시작 확인 기본은 off
 
+   // public int teleportCnt = 0;
 
     private void Start()
     {
@@ -78,6 +79,8 @@ public class P_CTRL : MonoBehaviour
         control.SetPosition(waypoint.position);
         control.isMovable = true;
         StartCountdown();
+
+        //teleportCnt += 1;
     }
 
     private void StartCountdown() //버튼 활성화 함수
@@ -94,7 +97,7 @@ public class P_CTRL : MonoBehaviour
     {
         float time = CountDown;
         //while 반복문 돌릴 변수는 카운트 다운 타임
-        while (time >= 0)
+        while (time > 0)
         {
             CountDownDisplay.text = Mathf.Ceil(time).ToString(); // 카운트다운 UI 업데이트
             yield return new WaitForSeconds(1f); //1초를 기다리고
@@ -102,7 +105,7 @@ public class P_CTRL : MonoBehaviour
         }
         if(time == 0)
         {
-            SceneManager.LoadScene("Wassbi 6");
+            SceneManager.LoadScene("Wasabi 6");
         }
     }
 

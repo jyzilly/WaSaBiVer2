@@ -17,7 +17,9 @@ public class Monster2_EX : MonoBehaviour
 
     bool isTeleport = false;
 
-    public AudioClip[] Creature2Sound;
+    public AudioClip Creature2Sound;
+
+    //public AudioClip footstep;
     //public AudioClip snowstep;
 
     public Image image;
@@ -29,6 +31,16 @@ public class Monster2_EX : MonoBehaviour
     public WSBMainGameController GM;
     private WSBPlayerController PC;
 
+    GameObject m1;
+    public NavMeshAgent m1Nav;
+
+    GameObject m2;
+    public NavMeshAgent m2Nav;
+
+    GameObject m3;
+    public NavMeshAgent m3Nav;
+
+    public AudioClip m2Scream;
 
     private void Awake()
     {
@@ -49,7 +61,14 @@ public class Monster2_EX : MonoBehaviour
         GM = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
         PC = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
 
+        GameObject m1 = GameObject.FindGameObjectWithTag("Creature2");
+        NavMeshAgent m1Nav = m1.GetComponent<NavMeshAgent>();
 
+        GameObject m2 = GameObject.FindGameObjectWithTag("Creature2_1");
+        NavMeshAgent m2Nav = m2.GetComponent<NavMeshAgent>();
+
+        GameObject m3 = GameObject.FindGameObjectWithTag("Creature2_2");
+        NavMeshAgent m3Nav = m3.GetComponent<NavMeshAgent>();
 
     }
 
@@ -63,11 +82,12 @@ public class Monster2_EX : MonoBehaviour
 
         if(GM.isRun2)
         {
-            AudioClip Cture2shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-            navMeshAgent.isStopped = true;
+            //navMeshAgent.isStopped = true;
+            m1Nav.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
             animator.SetBool("isItemUse", true);
             Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
@@ -76,11 +96,12 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun3)
         {
-            AudioClip Cture2_1shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2_1shout,0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-            navMeshAgent.isStopped = true;
+            //navMeshAgent.isStopped = true;
+            m2Nav.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
             animator.SetBool("isItemUse", true);
             Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
@@ -89,15 +110,14 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun4)
         {
-            AudioClip Cture2_2shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2_2shout,0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
-            navMeshAgent.isStopped = true;
+            //navMeshAgent.isStopped = true;
+            m3Nav.isStopped = true;
             Debug.Log("¸ØÃã: " + navMeshAgent.isStopped);
             animator.SetBool("isItemUse", true);
-            //GetComponent<AudioSource>().Stop();
-
             Debug.Log("¾Ö´Ï¸ÞÀÌ¼Ç");
 
             Invoke("monster2_again", 3f);
@@ -123,6 +143,7 @@ public class Monster2_EX : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             animator.SetBool("isCrash", false);
+          
             navMeshAgent.isStopped = false;
         }    
     }
@@ -154,7 +175,7 @@ public class Monster2_EX : MonoBehaviour
         Debug.Log(colorCreature.a);
 
         PC.SetPosition(mazepoint.position);
-      
+        
         
         isTeleport = false;
         yield return null;
@@ -177,14 +198,17 @@ public class Monster2_EX : MonoBehaviour
     void monsterIsAttack()
     {
         animator.SetBool("isCrash", true);
+        PC.Damage(30f);
         navMeshAgent.isStopped = true;
     }
 
     public void FootStep()
     {
-        AudioClip footStep = Creature2Sound[1];
+
+       // AudioClip footStep = Creature2Sound[1];
         GetComponent<AudioSource>().Stop();
-        GetComponent<AudioSource>().PlayOneShot(footStep);
+        GetComponent<AudioSource>().PlayOneShot(Creature2Sound);
+        //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
         //m_AudioSource.PlayOneShot(footstep);
     }
 
@@ -196,5 +220,11 @@ public class Monster2_EX : MonoBehaviour
         GM.isRun2 = false;
         GM.isRun3 = false;
         GM.isRun4 = false;
+    }
+
+    private void monster_Scream()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(m2Scream);
     }
 }

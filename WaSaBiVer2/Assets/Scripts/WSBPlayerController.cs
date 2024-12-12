@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using TMPro;
 
 [System.Serializable]
 public struct CastInfo
@@ -26,7 +28,9 @@ public class WSBPlayerController : MonoBehaviour
     //private float mouseX;
     //private float mouseY = 0f;
 
-    private WSBMainGameController MainGM;
+    public Camera_W CM;
+
+    public WSBMainGameController MainGM;
 
     public bool isMovable = true;
 
@@ -93,6 +97,11 @@ public class WSBPlayerController : MonoBehaviour
     public Vector3 _dir;
     private Vector3 OriginTr;
 
+    [SerializeField]
+    private GameObject blood;
+
+   // Camera_W CM;
+
     public AudioClip footLeft;
     public AudioClip footRight;
     public AudioClip SnowLeft;
@@ -100,7 +109,13 @@ public class WSBPlayerController : MonoBehaviour
 
     public bool isMain = false;
 
-    public AudioClip PlayerStep;
+    //public AudioClip PlayerStep;
+
+    public float stamina = 1000f;
+    private float maxStamina;
+    private bool canRun = false;
+    [SerializeField] TMP_Text stamina_UI;
+
     private void Awake()
     {
 
@@ -112,7 +127,9 @@ public class WSBPlayerController : MonoBehaviour
         Cture1 = GameObject.Find("BookHeadMonster").GetComponent<WSBCreature1>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
-        MainGM = GetComponent<WSBMainGameController>();
+        CM = GameObject.Find("Camera").GetComponent<Camera_W>();
+        //MainGM = GetComponent<WSBMainGameController>();
+        //CM = GameObject.FindWithTag("CM").GetComponent<Camera_W>();
 
         //hp 초기화시키는 설정
         curHp = maxHp;
@@ -131,49 +148,62 @@ public class WSBPlayerController : MonoBehaviour
 
         OriginTr = CamTr.transform.position;
 
-
+        maxStamina = stamina;
+        stamina_UI.text = ((int)(stamina / maxStamina * 100f)).ToString() + "%";
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
 
 
 
         //달리기 조작키
-        //if (Input.GetKey(KeyCode.LeftShift))
-        //{
-        //    run = true;
-        //}
-        //else
-        //{
-        //    run = false;
-        //}
-
-        //이동하는  함수호출
-        InputMovement();
-
-        if (Input.GetKey(KeyCode. W))
+        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
         {
-            animator.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            animator.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            animator.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            animator.SetBool("Walk", true);
+            stamina = stamina - 2;
+            run = true;
+            UpdateST();
+            animator.SetBool("canRun", true);
         }
         else
         {
-            animator.SetBool("Walk", false);
+            run = false;
+            if (stamina < 1000f)
+            {
+                stamina += 1f;
+
+            }
+            UpdateST();
+            animator.SetBool("canRun", false);
         }
 
-        ////뛰기 조작키
+        //이동하는  함수호출
+        InputMovement();
+        if (!run)
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
+            }
+        }
+
+        //뛰기 조작키
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
         //    animator.SetBool("Jump", true);
@@ -187,7 +217,7 @@ public class WSBPlayerController : MonoBehaviour
         //{
         //    animator.SetBool("Down", true);
         //    //CamTr.transform.position += _dir;
-            
+
         //}
         //else
         //{
@@ -219,7 +249,7 @@ public class WSBPlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("snow"))
+        if (other.CompareTag("snow"))
         {
             isMain = true;
         }
@@ -230,8 +260,6 @@ public class WSBPlayerController : MonoBehaviour
     {
         if (isMovable)
         {
-            //GetComponent<AudioSource>().Stop();
-            //GetComponent<AudioSource>().PlayOneShot(PlayerStep);
             //run true이면 run속도로 바꾸기
             finalSpeed = (run) ? runSpeed : moveSpeed;
 
@@ -247,9 +275,12 @@ public class WSBPlayerController : MonoBehaviour
             //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothness);
             //}
             float axisH = 0f;
+            //if (Input.GetKey(KeyCode.A)) axisH = -1f *5;
+            //else if (Input.GetKey(KeyCode.D)) axisH = 1f * 5;
+
             if (Input.GetKey(KeyCode.A))
             {
-                axisH = -1f *5;
+                axisH = -1f * 5;
                 //animator.SetBool("Walk", true);
             }
             else if (Input.GetKey(KeyCode.D))
@@ -287,14 +318,22 @@ public class WSBPlayerController : MonoBehaviour
         //GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
         //Debug.Log("들어옴");
         curHp -= _dmg;
+        // GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+        
+        if (_dmg > 0)
+        {
+            //CM.ShakeCoroutine();
+            blood.SetActive(true);
+           // CM.VivrateForTime(0.1f);
+            mainGameManager.Invoke("OffItemPb", 0.1f);
+        }
         if (curHp < 0f)
         {
             curHp = 0f;
             isDead = true;
             Debug.Log("Player is Dead");
-            SceneManager.LoadScene("Wasabi 6");
+            //SceneManager.LoadScene("Wasabi 6");
         }
-        //MainGM.Invoke("OffItemPb", 1.5f);
     }
 
     public void Heal(float _heal)
@@ -305,7 +344,6 @@ public class WSBPlayerController : MonoBehaviour
         if (curHp > maxHp) curHp = maxHp;
     }
 
-
     /*시야각 함수들*/
     public IEnumerator CheckTarget()
     {
@@ -314,7 +352,7 @@ public class WSBPlayerController : MonoBehaviour
         {
 
             float tmpAngle = viewAngle * 0.5f;
-            float tmpDist = 3f;
+            float tmpDist = viewRange * 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
 
@@ -322,15 +360,15 @@ public class WSBPlayerController : MonoBehaviour
             bool isCatch = false;
              
 
-           ;
+           
 
             for (int i = 0; i < rayCount; ++i)
             {
                 Vector3 dir = new Vector3(Mathf.Cos(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad), 0.0f, Mathf.Sin(((tmpAngle - i) + 90f - playerRot.y) * Mathf.Deg2Rad));
                 if (Physics.Raycast(transform.position + transform.up, dir, tmpDist, Spider))
                 {
+                    Debug.Log("this is Spider");
                     isSpider = true;
-                    //Debug.Log("this is Spider");
 
 
                 }
@@ -366,7 +404,7 @@ public class WSBPlayerController : MonoBehaviour
                 }
                 else
                 {
-                    isSpider = false;
+                    
                     isCreature1 = false;
                     isCreature2 = false;
                     isCreature2_1 = false;
@@ -389,7 +427,7 @@ public class WSBPlayerController : MonoBehaviour
             lineList.Clear();
 
             float tmpAngle = viewAngle * 0.5f;
-            float tmpDist = 3f;
+            float tmpDist = viewRange * 3f;
             Vector3 playerRot = transform.rotation.eulerAngles;
             int rayCount = Mathf.RoundToInt(viewAngle);
             for (int i = 0; i < rayCount; ++i)
@@ -418,14 +456,13 @@ public class WSBPlayerController : MonoBehaviour
         transform.position = _newPos;
         controller.enabled = true;
     }
-
     void PlayerFootLeft()
     {
         GetComponent<AudioSource>().Stop();
         GetComponent<AudioSource>().PlayOneShot(SnowLeft);
-       
-       // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
-       if (isMain)
+
+        // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
+        if (isMain)
         {
             GetComponent<AudioSource>().Stop();
             GetComponent<AudioSource>().PlayOneShot(footLeft);
@@ -439,10 +476,43 @@ public class WSBPlayerController : MonoBehaviour
         //AudioSource.PlayClipAtPoint(footRight, Camera.main.transform.position);
         if (isMain)
         {
-            
+
             GetComponent<AudioSource>().Stop();
             GetComponent<AudioSource>().PlayOneShot(footRight);
         }
     }
+
+    void fastFootL()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowLeft);
+
+        // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
+        if (isMain)
+        {
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footLeft);
+        }
+    }
+
+    void fastFootR()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowRight);
+        //AudioSource.PlayClipAtPoint(footRight, Camera.main.transform.position);
+        if (isMain)
+        {
+
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footRight);
+        }
+    }
+
+    private void UpdateST()
+    {
+        // stamina in UI system. It shows how many stamina left.
+        stamina_UI.text = ((int)(stamina / maxStamina * 100f)).ToString() + "%";
+    }
+
 
 }

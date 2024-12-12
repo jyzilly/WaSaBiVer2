@@ -22,11 +22,11 @@ TagManager:
   - Memory2
   - Memory3
   - Memory4
-  - pyramid
-  - plane
   - ExitDoor
   - Creature2_2
+  - Letter
   - Sausage
+  - CM
   layers:
   - Default
   - TransparentFX

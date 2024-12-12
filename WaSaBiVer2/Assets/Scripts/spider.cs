@@ -12,7 +12,7 @@ public class spider : MonoBehaviour
     [SerializeField] private WSBPlayerController PlayerController = null;
     [SerializeField] private WSBHpBar hpBar = null;
 
-    private WSBMainGameController GameManager = null;
+    [SerializeField] private WSBMainGameController GameManager;
 
     public NavMeshAgent navMeshAgent;
     public Transform[] waypoints; // 경로 배열 설정
@@ -31,7 +31,7 @@ public class spider : MonoBehaviour
         animator = GetComponent<Animator>();
         target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
         PlayerController = GameObject.Find("Ch46_nonPBR").GetComponent<WSBPlayerController>();
-        GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
+        //GameManager = GameObject.Find("GameManager").GetComponent<WSBMainGameController>();
 
         searchTarget = this.GetComponent<Transform>();
     }
@@ -44,12 +44,13 @@ public class spider : MonoBehaviour
 
     private void Update()
     {
-
+       
         setDistance();
         if (GameManager.isRun)
         {
             RunAway();
             GameManager.isRun = false;
+            PlayerController.isSpider = false;
         }
         setDistance();
     }
@@ -58,9 +59,10 @@ public class spider : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            AudioClip Spider = Spidershout[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Spider);
+            //AudioClip Spider = Spidershout[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Spider);
+
             target = GameObject.Find("Ch46_nonPBR").GetComponent<Transform>();
             navMeshAgent.SetDestination(target.position);
             animator.SetBool("isWalk", false);
@@ -93,10 +95,6 @@ public class spider : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            //Spidershout
-            //AudioClip Spider = Spidershout[0];
-            //GetComponent<AudioSource>().Stop();
-            //GetComponent<AudioSource>().PlayOneShot(Spider);
             navMeshAgent.SetDestination(target.position);
             animator.SetBool("isWalk", false);
             animator.SetBool("isAttack", true);
@@ -136,4 +134,10 @@ public class spider : MonoBehaviour
         GetComponent<AudioSource>().PlayOneShot(SpiderFoot);
     }
 
+    private void attackSound()
+    {
+        AudioClip Spider = Spidershout[0];
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(Spider);
+    }
 }

@@ -5,13 +5,12 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using NUnit.Framework.Internal;
 
 public class WSBItemManager : MonoBehaviour
 {
 
     //아이템 버튼 형식으로 표현
-    [SerializeField] private Button sausage;
+    [SerializeField] private Button flash;
     [SerializeField] private Button charm;
     [SerializeField] private Button fire;
     [SerializeField] private Button firecracker;
@@ -33,6 +32,7 @@ public class WSBItemManager : MonoBehaviour
     [SerializeField] private Image blockballImg;
 
 
+
     private int CharmCnt = 0;
     private int FireCnt = 0;
     private int FirecrackerCnt = 0;
@@ -50,6 +50,9 @@ public class WSBItemManager : MonoBehaviour
     public bool isMemory2 = false;
     public bool isMemory3 = false;
     public bool isMemory4 = false;
+
+
+    public bool isLetter = false;
 
     // private bool PlayerGetLight; //true일 경우 손전등on
     // private Light myLight; //light 컴포넌트를 담는 변수
@@ -72,6 +75,7 @@ public class WSBItemManager : MonoBehaviour
     private Vector3 DestroyTr;
 
     public AudioClip[] itemsounds;
+
     private void Awake()
     {
     }
@@ -80,16 +84,13 @@ public class WSBItemManager : MonoBehaviour
     {
         CreatItem();
         SetMK();
-
+       
     }
 
     private void Update()
     {
         GetItem();
         SetItemImg();
-
-
-
     }
 
     private void GetItem()
@@ -239,16 +240,20 @@ public class WSBItemManager : MonoBehaviour
                     getItem = true;
                 }
 
+                else if (hit.transform.gameObject.tag == "Letter")
+                {
+                    Debug.Log(isLetter);
+                    isLetter = true;
+                }
+
 
                 if (getItem == true)
                 {
-
                     UpdateItemCnt();
                     Destroy(hit.transform.gameObject);
 
                     DestroyTr = hit.transform.position;
-                    Invoke("ReCreatItem",30f);
-
+                    Invoke("ReCreatItem", 30f);
                 }
                 Debug.Log("Key : " + keyCnt);
                 Debug.Log("Momory : " + memoryCnt);
@@ -265,7 +270,6 @@ public class WSBItemManager : MonoBehaviour
         GameObject randomItem = Items[Random.Range(0, Items.Length)];
         Instantiate(randomItem, DestroyTr, Quaternion.identity);
     }
-
     private void UpdateItemCnt()
     {
         charmCnt.text = CharmCnt.ToString();
@@ -273,6 +277,7 @@ public class WSBItemManager : MonoBehaviour
         firecrackerCnt.text = FirecrackerCnt.ToString();
         blockballCnt.text = BlockballCnt.ToString();
         sausageCnt.text = SausageCnt.ToString();
+
     }
 
     public void PressedFireButton()
@@ -338,7 +343,7 @@ public class WSBItemManager : MonoBehaviour
 
     public void PressedSausageButton()
     {
-        if (SausageCnt > 0)
+        if(SausageCnt > 0)
         {
             AudioClip Sausage = itemsounds[3];
             GetComponent<AudioSource>().Stop();
@@ -346,11 +351,8 @@ public class WSBItemManager : MonoBehaviour
             --SausageCnt;
             UpdateItemCnt();
             item5Able = true;
-
         }
     }
-
-
 
     private void SetItemImg()
     {
@@ -362,7 +364,7 @@ public class WSBItemManager : MonoBehaviour
         {
             charmImg.enabled = true;
         }
-        if(FireCnt == 0)
+        if (FireCnt == 0)
         {
             fireImg.enabled = false;
         }
@@ -370,7 +372,7 @@ public class WSBItemManager : MonoBehaviour
         {
             fireImg.enabled = true;
         }
-        if(FirecrackerCnt == 0)
+        if (FirecrackerCnt == 0)
         {
             firecrackerImg.enabled = false;
         }
@@ -378,7 +380,7 @@ public class WSBItemManager : MonoBehaviour
         {
             firecrackerImg.enabled = true;
         }
-        if(BlockballCnt == 0)
+        if (BlockballCnt == 0)
         {
             blockballImg.enabled = false;
         }
@@ -386,7 +388,7 @@ public class WSBItemManager : MonoBehaviour
         {
             blockballImg.enabled = true;
         }
-        if(SausageCnt == 0)
+        if (SausageCnt == 0)
         {
             sausageImg.enabled = false;
         }
@@ -428,12 +430,12 @@ public class WSBItemManager : MonoBehaviour
 
     private void CreatItem()
     {
-        for(int i = 0; i < 7; ++i)
+        for (int i = 0; i < 7; ++i)
         {
-            
+
             GameObject randomItem = Items[Random.Range(0, Items.Length)];
-            //GameObject randomItem = Items[3];
-            Instantiate(randomItem, CreatItemTrs[i].position,Quaternion.identity);
+            //GameObject randomItem = Items[2];
+            Instantiate(randomItem, CreatItemTrs[i].position, Quaternion.identity);
 
         }
         Debug.Log("아이템 생성완료");
@@ -478,7 +480,6 @@ public class WSBItemManager : MonoBehaviour
         }
 
     }
-
 
 }
 

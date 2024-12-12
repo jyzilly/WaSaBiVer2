@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WSBMainGameController : MonoBehaviour
 {
-    private WSBPlayerController PlayerController;
+    [SerializeField]private WSBPlayerController PlayerController;
     private WSBItemManager ItemManager;
 
     //public GameObject firePb;
@@ -23,7 +23,6 @@ public class WSBMainGameController : MonoBehaviour
 
 
 
-
     private void Start()
     {
         ItemManager = GameObject.Find("ItemManager").GetComponent<WSBItemManager>();
@@ -33,32 +32,31 @@ public class WSBMainGameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             //거미
             ItemManager.PressedFireButton();
-            if (ItemManager.item1Able)
+            if(ItemManager.item1Able)
             {
+               
                 GameObject.Find("Ch46_nonPBR").transform.Find("FirePrefab").transform.gameObject.SetActive(true);
-                
-                Debug.Log("프리팹");
-                ItemManager.item1Able = false;
-               // Debug.Log(ItemManager.item1Able);
+                //Debug.Log(ItemManager.item1Able);
+                 Debug.Log(PlayerController.isSpider);
                 if (PlayerController.isSpider)
                 {
-                    Debug.Log(PlayerController.isSpider);
 
-                    // 맞게 사용된 파티클 효과
                     isRun = true;
+                    Debug.Log(isRun);
+                   
                 }
             }
+            ItemManager.item1Able = false;
             Invoke("OffItemPb", 1.5f);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //할아버지
             ItemManager.PressedCharmButton();
-
             Debug.Log(ItemManager.item2Able);
 
 
@@ -67,8 +65,6 @@ public class WSBMainGameController : MonoBehaviour
         {
             //크리쳐 2
             ItemManager.PressedFirecrackerButton();
-
-
             if (ItemManager.item3Able)
             {
                 GameObject.Find("Ch46_nonPBR").transform.Find("firecake").transform.gameObject.SetActive(true);
@@ -92,7 +88,7 @@ public class WSBMainGameController : MonoBehaviour
                     isRun4 = true;
                 }
             }
-            Invoke("OffItemPb", 1.5f);
+            Invoke("OffItemPb", 2.0f);
 
 
         }
@@ -100,10 +96,9 @@ public class WSBMainGameController : MonoBehaviour
         {
             // 크리쳐 1
             ItemManager.PressedBlockballButton();
-
             if (ItemManager.item4Able)
             {
-                GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(true);
+                GameObject.Find("Ch46_nonPBR").transform.Find("dust").transform.gameObject.SetActive(true);
                 Debug.Log("상태" + ItemManager.item1Able.ToString());
                 ItemManager.item4Able = false;
 
@@ -120,8 +115,7 @@ public class WSBMainGameController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Alpha5))
         {
             ItemManager.PressedSausageButton();
-
-            if (ItemManager.item5Able)
+            if(ItemManager.item5Able)
             {
                 float heal = 20f;
                 PlayerController.Heal(heal);
@@ -131,12 +125,12 @@ public class WSBMainGameController : MonoBehaviour
         }
     }
 
-    void OffItemPb()
+    public void OffItemPb()
     {
        GameObject.Find("Ch46_nonPBR").transform.Find("FirePrefab").transform.gameObject.SetActive(false);
         GameObject.Find("Ch46_nonPBR").transform.Find("firecake").transform.gameObject.SetActive(false);
         GameObject.Find("Ch46_nonPBR").transform.Find("Blood").transform.gameObject.SetActive(false);
-
+        GameObject.Find("Ch46_nonPBR").transform.Find("dust").transform.gameObject.SetActive(false);
     }
 
 }
