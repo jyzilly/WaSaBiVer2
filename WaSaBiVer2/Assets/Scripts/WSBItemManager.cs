@@ -76,6 +76,8 @@ public class WSBItemManager : MonoBehaviour
 
     public AudioClip[] itemsounds;
 
+    public Image _image = null;
+
     private void Awake()
     {
     }
@@ -227,10 +229,12 @@ public class WSBItemManager : MonoBehaviour
                 {
                     if(memoryCnt > 2)
                     {
+                        //StartCoroutine(Fade());
                         SceneManager.LoadScene("Wasabi 4");
                     }
                     else if(memoryCnt <=2)
                     {
+                        //StartCoroutine(Fade());
                         SceneManager.LoadScene("Wasabi 5");
                     }
                 }
@@ -481,5 +485,15 @@ public class WSBItemManager : MonoBehaviour
 
     }
 
+    IEnumerator Fade(int alpha, int sign)
+    {
+        while (_image.color.a < 0)
+        {
+            Color color = _image.color;
+            color.a += Time.deltaTime;
+            _image.color = color;
+            yield return null;
+        }
+    }
 }
 

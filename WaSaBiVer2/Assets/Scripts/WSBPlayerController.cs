@@ -111,10 +111,13 @@ public class WSBPlayerController : MonoBehaviour
 
     //public AudioClip PlayerStep;
 
-    public float stamina = 1000f;
+    public float stamina = 500f;
     private float maxStamina;
     private bool canRun = false;
     [SerializeField] TMP_Text stamina_UI;
+
+    public AudioClip girlBreath;
+    public AudioClip ouch;
 
     private void Awake()
     {
@@ -158,48 +161,64 @@ public class WSBPlayerController : MonoBehaviour
 
 
         //달리기 조작키
-        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
+        if (isMovable)
         {
-            stamina = stamina - 2;
-            run = true;
-            UpdateST();
-            animator.SetBool("canRun", true);
-        }
-        else
-        {
-            run = false;
-            if (stamina < 1000f)
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
             {
-                stamina += 1f;
-
+                stamina = stamina - 2;
+                run = true;
+                UpdateST();
+                animator.SetBool("canRun", true);
             }
-            UpdateST();
-            animator.SetBool("canRun", false);
+            else
+            {
+                run = false;
+                if (stamina == 0)
+                {
+                    isMovable = false;
+                    //GetComponent<AudioSource>().Stop();
+                    //GetComponent<AudioSource>().PlayOneShot(girlBreath);
+                    StartCoroutine(WaitrForIt());
+                }
+                if (stamina < 500f)
+                {
+                    stamina += 1f;
+
+                }
+                //Invoke("again_move", 3f);
+                UpdateST();
+                animator.SetBool("canRun", false);
+            }
         }
 
         //이동하는  함수호출
         InputMovement();
+       
         if (!run)
         {
-            if (Input.GetKey(KeyCode.W))
+            if (isMovable)
             {
-                animator.SetBool("Walk", true);
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                animator.SetBool("Walk", true);
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                animator.SetBool("Walk", true);
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                animator.SetBool("Walk", true);
+                if (Input.GetKey(KeyCode.W))
+                {
+                    animator.SetBool("Walk", true);
+                }
+                else if (Input.GetKey(KeyCode.A))
+                {
+                    animator.SetBool("Walk", true);
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    animator.SetBool("Walk", true);
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    animator.SetBool("Walk", true);
+                }
             }
             else
             {
                 animator.SetBool("Walk", false);
+            
             }
         }
 
@@ -324,7 +343,9 @@ public class WSBPlayerController : MonoBehaviour
         {
             //CM.ShakeCoroutine();
             blood.SetActive(true);
-           // CM.VivrateForTime(0.1f);
+            // CM.VivrateForTime(0.1f);
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(ouch);
             mainGameManager.Invoke("OffItemPb", 0.1f);
         }
         if (curHp < 0f)
@@ -514,5 +535,16 @@ public class WSBPlayerController : MonoBehaviour
         stamina_UI.text = ((int)(stamina / maxStamina * 100f)).ToString() + "%";
     }
 
+    void again_move()
+    {
+        isMovable = true;
+    }
 
+    IEnumerator WaitrForIt()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(girlBreath);
+        yield return new WaitForSeconds(1.5f);
+        isMovable = true;
+    }
 }
