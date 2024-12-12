@@ -17,7 +17,7 @@ public class Monster2_EX : MonoBehaviour
 
     bool isTeleport = false;
 
-    public AudioClip[] Creature2Sound;
+    public AudioClip Creature2Sound;
 
     //public AudioClip footstep;
     //public AudioClip snowstep;
@@ -82,9 +82,9 @@ public class Monster2_EX : MonoBehaviour
 
         if(GM.isRun2)
         {
-            AudioClip Cture2shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             //navMeshAgent.isStopped = true;
             m1Nav.isStopped = true;
@@ -96,9 +96,9 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun3)
         {
-            AudioClip Cture2shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             //navMeshAgent.isStopped = true;
             m2Nav.isStopped = true;
@@ -110,9 +110,9 @@ public class Monster2_EX : MonoBehaviour
         }
         else if(GM.isRun4)
         {
-            AudioClip Cture2shout = Creature2Sound[0];
-            GetComponent<AudioSource>().Stop();
-            GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
+            //AudioClip Cture2shout = Creature2Sound[0];
+            //GetComponent<AudioSource>().Stop();
+            //GetComponent<AudioSource>().PlayOneShot(Cture2shout, 0.8f);
             Debug.Log("ÆøÁ×»ç¿ë ¼º°ø");
             //navMeshAgent.isStopped = true;
             m3Nav.isStopped = true;
@@ -205,9 +205,9 @@ public class Monster2_EX : MonoBehaviour
     public void FootStep()
     {
 
-        AudioClip footStep = Creature2Sound[1];
+       // AudioClip footStep = Creature2Sound[1];
         GetComponent<AudioSource>().Stop();
-        GetComponent<AudioSource>().PlayOneShot(footStep);
+        GetComponent<AudioSource>().PlayOneShot(Creature2Sound);
         //AudioSource.PlayClipAtPoint(footstep, Camera.main.transform.position);
         //m_AudioSource.PlayOneShot(footstep);
     }

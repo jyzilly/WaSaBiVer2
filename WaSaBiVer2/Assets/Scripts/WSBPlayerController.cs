@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using TMPro;
 
 [System.Serializable]
 public struct CastInfo
@@ -26,6 +27,8 @@ public class WSBPlayerController : MonoBehaviour
 
     //private float mouseX;
     //private float mouseY = 0f;
+
+    public Camera_W CM;
 
     public WSBMainGameController MainGM;
 
@@ -97,7 +100,7 @@ public class WSBPlayerController : MonoBehaviour
     [SerializeField]
     private GameObject blood;
 
-    Camera_W CM;
+   // Camera_W CM;
 
     public AudioClip footLeft;
     public AudioClip footRight;
@@ -106,7 +109,12 @@ public class WSBPlayerController : MonoBehaviour
 
     public bool isMain = false;
 
-    public AudioClip PlayerStep;
+    //public AudioClip PlayerStep;
+
+    public float stamina = 1000f;
+    private float maxStamina;
+    private bool canRun = false;
+    [SerializeField] TMP_Text stamina_UI;
 
     private void Awake()
     {
@@ -119,8 +127,9 @@ public class WSBPlayerController : MonoBehaviour
         Cture1 = GameObject.Find("BookHeadMonster").GetComponent<WSBCreature1>();
         animator = this.GetComponent<Animator>();
         controller = this.GetComponent<CharacterController>();
+        CM = GameObject.Find("Camera").GetComponent<Camera_W>();
         //MainGM = GetComponent<WSBMainGameController>();
-        CM = GameObject.FindWithTag("CM").GetComponent<Camera_W>();
+        //CM = GameObject.FindWithTag("CM").GetComponent<Camera_W>();
 
         //hp 초기화시키는 설정
         curHp = maxHp;
@@ -139,7 +148,8 @@ public class WSBPlayerController : MonoBehaviour
 
         OriginTr = CamTr.transform.position;
 
-
+        maxStamina = stamina;
+        stamina_UI.text = ((int)(stamina / maxStamina * 100f)).ToString() + "%";
     }
 
     private void FixedUpdate()
@@ -148,39 +158,50 @@ public class WSBPlayerController : MonoBehaviour
 
 
         //달리기 조작키
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && stamina > 0)
         {
+            stamina = stamina - 2;
             run = true;
+            UpdateST();
+            animator.SetBool("canRun", true);
         }
         else
         {
             run = false;
+            if (stamina < 1000f)
+            {
+                stamina += 1f;
+
+            }
+            UpdateST();
+            animator.SetBool("canRun", false);
         }
 
         //이동하는  함수호출
         InputMovement();
-
-        if (Input.GetKey(KeyCode.W))
+        if (!run)
         {
-            animator.SetBool("Walk", true);
+            if (Input.GetKey(KeyCode.W))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                animator.SetBool("Walk", true);
+            }
+            else
+            {
+                animator.SetBool("Walk", false);
+            }
         }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            animator.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            animator.SetBool("Walk", true);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            animator.SetBool("Walk", true);
-        }
-        else
-        {
-            animator.SetBool("Walk", false);
-        }
-
 
         //뛰기 조작키
         //if (Input.GetKeyDown(KeyCode.Space))
@@ -301,6 +322,7 @@ public class WSBPlayerController : MonoBehaviour
         
         if (_dmg > 0)
         {
+            //CM.ShakeCoroutine();
             blood.SetActive(true);
            // CM.VivrateForTime(0.1f);
             mainGameManager.Invoke("OffItemPb", 0.1f);
@@ -458,6 +480,38 @@ public class WSBPlayerController : MonoBehaviour
             GetComponent<AudioSource>().Stop();
             GetComponent<AudioSource>().PlayOneShot(footRight);
         }
+    }
+
+    void fastFootL()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowLeft);
+
+        // AudioSource.PlayClipAtPoint(footLeft, Camera.main.transform.position);
+        if (isMain)
+        {
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footLeft);
+        }
+    }
+
+    void fastFootR()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(SnowRight);
+        //AudioSource.PlayClipAtPoint(footRight, Camera.main.transform.position);
+        if (isMain)
+        {
+
+            GetComponent<AudioSource>().Stop();
+            GetComponent<AudioSource>().PlayOneShot(footRight);
+        }
+    }
+
+    private void UpdateST()
+    {
+        // stamina in UI system. It shows how many stamina left.
+        stamina_UI.text = ((int)(stamina / maxStamina * 100f)).ToString() + "%";
     }
 
 

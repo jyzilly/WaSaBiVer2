@@ -35,7 +35,7 @@ public class WSBCreature1 : MonoBehaviour
     //private Transform Creature1Tr = null;
 
     //플레이어 근처 갔을 때 반경거리
-    private int distance = 10;
+    private int distance = 20;
     /*여기까지 -------------------------------------*/
 
 
