@@ -59,7 +59,7 @@ public class WSBCreature1 : MonoBehaviour
 
     private bool isMoving = false;
 
-    public AudioClip[] CtureShout = null;
+    public AudioClip CtureShout;
     public AudioClip monsterFoot;
 
     private void Awake()
@@ -140,9 +140,9 @@ public class WSBCreature1 : MonoBehaviour
     {
         isMoving = true;
 
-        AudioClip Creture1shout = CtureShout[0];
-        GetComponent<AudioSource>().Stop();
-        GetComponent<AudioSource>().PlayOneShot(Creture1shout, 0.8f);
+        //AudioClip Creture1shout = CtureShout[0];
+        //GetComponent<AudioSource>().Stop();
+        //GetComponent<AudioSource>().PlayOneShot(Creture1shout, 0.8f);
 
         while (true)
         {
@@ -190,6 +190,12 @@ public class WSBCreature1 : MonoBehaviour
     {
         GetComponent<AudioSource>().Stop();
         GetComponent<AudioSource>().PlayOneShot(monsterFoot);
+    }
+
+    void m1_scream()
+    {
+        GetComponent<AudioSource>().Stop();
+        GetComponent<AudioSource>().PlayOneShot(CtureShout);
     }
 }
 
