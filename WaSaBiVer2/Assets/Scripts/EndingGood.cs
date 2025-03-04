@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using System;
-using UnityEditor.Rendering;
 
 public class EndingGood : MonoBehaviour
 {
@@ -77,7 +76,7 @@ public class EndingGood : MonoBehaviour
         while (currentLineIndex < dialogueLines.Length)
         {
 
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(3f);
             allText.text = "";
            
 
@@ -86,7 +85,7 @@ public class EndingGood : MonoBehaviour
                // Debug.Log(currentLineIndex);
                 yield return new WaitForSeconds(0.2f);
                 allText.text = dialogueLines[1];
-                yield return new WaitForSeconds(2f);  // 시작 대기시간
+                yield return new WaitForSeconds(4f);  // 시작 대기시간
                 SceneManager.LoadScene("Wasabi 1");
 
             }
